@@ -1,4 +1,6 @@
+"use client"
 import Link from "next/link"
+import { Icon } from "@iconify/react"
 
 const Footer = () => {
 	return (
@@ -8,9 +10,13 @@ const Footer = () => {
 				<p>
 					Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
 				</p>
-				<div>
-					<Link href="https://www.linkedin.com/in/shadin-muhammed-69b004256/">L</Link>
-					<Link href="https://github.com/shadinmhd">G</Link>
+				<div className="flex gap-3 p-2">
+					<Link href="https://www.linkedin.com/in/shadin-muhammed-69b004256/">
+						<Icon icon={"mdi:linkedin"} className="text-xl" />
+					</Link>
+					<Link href="https://github.com/shadinmhd">
+						<Icon icon={'mdi:github'} className="text-xl"/>
+					</Link>
 				</div>
 			</div>
 			<div className="w-full">
@@ -22,9 +28,6 @@ const Footer = () => {
 					<p>+91 85889908075</p>
 					<p>shadinmhd98@gmail.com</p>
 					<p>673572</p>
-				</div>
-				<div className="flex gap-2">
-
 				</div>
 			</div>
 		</footer>
