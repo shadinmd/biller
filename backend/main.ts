@@ -5,10 +5,13 @@ import dotenv from "dotenv"
 import adminRouter from "./routes/admin.route"
 import authRouter from "./routes/auth.route"
 import vendorRouter from "./routes/vendor.route"
+import connectDb from "./configs/database"
 
 dotenv.config()
 
 const app = express()
+
+connectDb()
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
