@@ -25,7 +25,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 		<div className="flex items-center justify-center h-screen w-screen">
 			{path != "/admin/login" && <Sidebar items={links} />}
 			<div className="flex flex-col gap-5 h-full w-full bg-custom-offwhite p-5">
-				<p className="text-custom-light-gray">{path}</p>
+				{path != "/admin/login" && <p className="text-custom-light-gray">{path}</p>}
 				{children}
 			</div>
 		</div>
