@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Icon } from "@iconify/react"
 import { Separator } from "@/components/shadcn/Seperator"
 import VendorInterface from "types/vendor.interface"
-import api, { handlAxiosError } from "@/lib/api"
+import api, { handleAxiosError } from "@/lib/api"
 import { toast } from "sonner"
 
 const Vendors = () => {
@@ -25,7 +25,7 @@ const Vendors = () => {
 				}
 			})
 			.catch((error) => {
-				handlAxiosError(error)
+				handleAxiosError(error)
 			})
 	},[])
 

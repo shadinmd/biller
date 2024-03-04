@@ -10,7 +10,7 @@ api.interceptors.request.use((request) => {
 	return request
 })
 
-export const handlAxiosError = (error: any) => {
+export const handleAxiosError = (error: any) => {
 	if (isAxiosError(error)) {
 		if (error.response?.data.message)
 			toast.error(error.response.data.message)

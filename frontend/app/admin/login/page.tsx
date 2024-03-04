@@ -1,6 +1,7 @@
 "use client"
-import api, { handlAxiosError } from "@/lib/api"
+import api, { handleAxiosError } from "@/lib/api"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -28,14 +29,17 @@ const Login = () => {
 				toast.error(response.data.message)
 			}
 		} catch (error) {
-			handlAxiosError(error)
+			handleAxiosError(error)
 		}
 	}
 
 	return (
 		<div className="flex items-center justify-center bg-custom-offwhite h-screen w-screen">
-			<div className="flex flex-col gap-5 items-center bg-white rounded-lg p-10">
-				<p className="text-4xl font-bold">Admin</p>
+			<div className="flex flex-col gap-5 items-center bg-white rounded-lg p-10 drop-shadow-lg">
+				<div className="flex flex-col">
+					<p className="text-4xl font-bold">Admin</p>
+					<p>admin login page</p>
+				</div>
 				<form
 					onSubmit={handleSubmit(submit)}
 					className="flex flex-col gap-2 items-center"
@@ -54,9 +58,12 @@ const Login = () => {
 						className={`border-2 ${errors.password ? "border-red-500" : "border-primary"} rounded-lg px-3 py-1 outline-none`}
 					/>
 					{errors.password && <p className="text-red-500">{errors.password.message}</p>}
-					<button type="submit" className="px-6 py-2 text-white font-bold bg-primary rounded-lg">
+					<button type="submit" className="py-2 w-full text-white font-bold bg-primary rounded-lg">
 						Login
 					</button>
+					<Link className="" href={"/"} >
+						not an admin? <span>go back</span>
+					</Link>
 				</form>
 			</div>
 		</div>

@@ -2,6 +2,8 @@ import { Request, Response } from "express"
 import { handle500ServerError } from "../libs/error.handlers"
 import AdminModel from "../models/admin.model"
 import jwt from "jsonwebtoken"
+import VendorModel from "../models/vendor.model"
+import { hashPass } from "../libs/password"
 
 export const adminLogin = async (req: Request, res: Response) => {
 	try {
@@ -62,9 +64,29 @@ export const vendorLogin = (req: Request, res: Response) => {
 	}
 }
 
-export const vendorRegister = (req: Request, res: Response) => {
+export const vendorRegister = async (req: Request, res: Response) => {
 	try {
-		const { } = req.body
+		const { username, email, password } = req.body
+
+		const vendorSearch = await VendorModel.findOne({ username })
+
+		if (vendorSearch) {
+
+			res.status(400).send({
+				success: false,
+				message: "email allready in use"
+			})
+
+			return
+		}
+
+		const hashedPassword = hashPass(password)
+
+		await new VendorModel({
+			username,
+			password: hashedPassword,
+			email
+		}).save()
 
 	} catch (error) {
 		console.log(error)
@@ -75,6 +97,15 @@ export const vendorRegister = (req: Request, res: Response) => {
 export const staffLogin = (req: Request, res: Response) => {
 	try {
 		const { username, password, shopId } = req.body
+
+		if (!username || !password || !shopId) {
+			res.status(400).send({
+				success: false,
+				message: "please fill all fields"
+			})
+
+			return
+		}
 
 	} catch (error) {
 		console.log(error)
