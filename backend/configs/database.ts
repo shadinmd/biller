@@ -4,7 +4,7 @@ const connectDb = async () => {
 	try {
 		const DBURL = process.env.DBURL
 		if (!DBURL) {
-			throw new Error("DBURL empty")
+			throw new Error("DBURL not found in env")
 		}
 		const connection = await mongoose.connect(DBURL)
 	} catch (error) {
