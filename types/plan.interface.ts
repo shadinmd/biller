@@ -3,7 +3,7 @@ interface PlanInterface {
 	description: string
 	price: number
 	discount: number
-	active: number
+	active: boolean
 	features: string[]
 	productLimit: number
 	staffLimi: number
