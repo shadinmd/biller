@@ -6,8 +6,8 @@ interface PlanInterface {
 	active: boolean
 	features: string[]
 	productLimit: number
-	staffLimi: number
-	shopLimit: number
+	staffLimit: number
+	shopLimitt: number
 }
 
 export default PlanInterface
