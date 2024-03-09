@@ -1,10 +1,17 @@
 "use client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 const Navbar = () => {
 
 	const pathname = usePathname()
+	const [loggedIn, setLoggedIn] = useState(false)
+
+	useEffect(() => {
+		if (localStorage.getItem("vendor-token"))
+			setLoggedIn(true)
+	}, [])
 
 	return (
 		<header className="flex items-center justify-between w-full  py-5 px-10 sm:px-20">
@@ -25,9 +32,9 @@ const Navbar = () => {
 			</div>
 			<div className="flex items-center gap-5">
 				<Link href={"/staff/login"} className="text-primary outline-none font-bold">
-					staff login
+					Staff Login
 				</Link>
-				<Link href={"/login"} className="bg-primary text-white outline-none font-bold py-3 px-6 rounded-full">
+				<Link href={loggedIn ? "/vendor" : "/login"} className="bg-primary text-white outline-none font-bold py-3 px-6 rounded-full">
 					Get Started
 				</Link>
 			</div>
