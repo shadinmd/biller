@@ -21,7 +21,7 @@ const Select = ({ items, onSelect }: Props) => {
 				<SelectGroup className="outline-none">
 					{
 						items.map((e, i) => (
-							<SelectItem value={e} key={i}>
+							<SelectItem value={e} key={i} className="outline-none">
 								{e}
 							</SelectItem>
 						))

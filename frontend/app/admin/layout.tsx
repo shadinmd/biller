@@ -3,6 +3,7 @@ import { ReactNode } from "react"
 import { useEffect } from "react"
 import { redirect, usePathname } from "next/navigation"
 import Sidebar from "@/components/shared/Sidebar"
+import api from "@/lib/api"
 
 const links: { title: string, to: string, icon: string }[] = [
 	{ title: "Dashboard", to: "/admin", icon: "mdi:home" },
@@ -15,11 +16,18 @@ const Layout = ({ children }: { children: ReactNode }) => {
 	const path = usePathname()
 
 	useEffect(() => {
+		api.interceptors.request.use((request) => {
+			if (localStorage.getItem("admin-token")) {
+				request.headers.Authorization = localStorage.getItem("admin-token")
+			}
+			return request
+		})
+
 		if (path != "/admin/login")
 			if (!localStorage.getItem("admin-token")) {
 				redirect("/admin/login")
 			}
-	}, [])
+	}, [path])
 
 	return (
 		<div className="flex items-center justify-center h-screen w-screen">

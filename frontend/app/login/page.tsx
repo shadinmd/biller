@@ -4,13 +4,14 @@ import Navbar from '@/components/Navbar'
 import api, { handleAxiosError } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 const formSchemma = z.object({
-	username: z.string().min(1, { message: "this field cannot be empty" }),
+	email: z.string().email({ message: "Please enter a valid email" }),
 	password: z.string().min(1, { message: "this field cannot be empty" })
 })
 
@@ -19,12 +20,14 @@ type formType = z.infer<typeof formSchemma>
 const Login = () => {
 
 	const { register, handleSubmit, formState: { errors } } = useForm<formType>({ resolver: zodResolver(formSchemma) })
+	const router = useRouter()
 
 	const onSubmit = async (data: formType) => {
 		try {
 			const response = await api.post("/auth/vendor/login", data)
 			if (response.data.success) {
-				console.log(response.data)
+				localStorage.setItem("vendor-token", response.data.token)
+				router.push("/vendor")
 			} else {
 				toast.error(response.data.message)
 			}
@@ -38,30 +41,30 @@ const Login = () => {
 			<Navbar />
 			<div className='flex flex-col items-center justify-center w-full h-full'>
 				<div className='flex flex-col items-center bg-white gap-10 p-10 rounded-lg drop-shadow-lg'>
-					<p className='text-5xl font-bold'>Register</p>
+					<p className='text-5xl font-bold'>Login</p>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className='flex flex-col gap-3'
+						className='flex flex-col gap-3 items-center'
 					>
 						<input
-							{...register("username")}
-							placeholder='Username'
+							{...register("email")}
+							placeholder='Email'
 							type="text"
-							className={`px-3 py-1 border-2 border-primary rounded-lg`}
+							className={`px-3 py-1 border-2 ${errors.email ? "border-red-500 placeholder:text-red-500" : "border-primary"} rounded-lg outline-none`}
 						/>
-						{errors.username && <p className='text-red-500'>{errors.username.message}</p>}
+						{errors.email && <p className='text-red-500'>{errors.email.message}</p>}
 						<input
 							{...register("password")}
 							placeholder='Password'
 							type="password"
-							className={`px-3 py-1 border-2 border-primary rounded-lg`}
+							className={`px-3 py-1 border-2 ${errors.password ? "border-red-500 placeholder:text-red-500" : "border-primary"} rounded-lg outline-none`}
 						/>
 						{errors.password && <p className='text-red-500'>{errors.password.message}</p>}
 						<button className='text-white bg-primary rounded-lg font-bold px-6 py-2'>
 							Login
 						</button>
 					</form>
-					<Link href={"/register"} >Allready have an account? <span className='text-black'>Register here</span></Link>
+					<Link href={"/register"} className='text-custom-light-gray' >Allready have an account? <span className='text-black'>Register here</span></Link>
 				</div>
 			</div>
 			<Footer />

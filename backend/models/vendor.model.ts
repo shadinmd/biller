@@ -26,6 +26,10 @@ const vendorSchema = new mongoose.Schema<vendorInterface>({
 		type: Boolean,
 		default: true
 	},
+	blocked: {
+		type: Boolean,
+		default: false
+	},
 	deleted: {
 		type: Boolean,
 		default: false

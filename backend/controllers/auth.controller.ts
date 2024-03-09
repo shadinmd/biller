@@ -1,9 +1,9 @@
 import { Request, Response } from "express"
 import { handle500ServerError } from "../libs/error.handlers"
 import AdminModel from "../models/admin.model"
-import jwt from "jsonwebtoken"
 import VendorModel from "../models/vendor.model"
-import { hashPass } from "../libs/password"
+import { comparePass, createToken, hashPass } from "../libs/auth"
+import StaffModel from "../models/staff.model"
 
 export const adminLogin = async (req: Request, res: Response) => {
 	try {
@@ -34,12 +34,10 @@ export const adminLogin = async (req: Request, res: Response) => {
 			})
 		}
 
-		const payload = {
+		const token = createToken({
 			id: adminSearch._id,
-			admin: true
-		}
-
-		const token = jwt.sign(payload, process.env.JWT_SECRET as string)
+			type: "admin"
+		})
 
 		res.status(200).send({
 			success: true,
@@ -54,9 +52,49 @@ export const adminLogin = async (req: Request, res: Response) => {
 	}
 }
 
-export const vendorLogin = (req: Request, res: Response) => {
+export const vendorLogin = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body
+		console.log(email, password)
+
+		if (!email || !password) {
+			res.status(400).send({
+				success: false,
+				message: "please fill all fields"
+			})
+			return
+		}
+
+		const vendorSearch = await VendorModel.findOne({ email })
+
+		if (!vendorSearch) {
+			res.status(400).send({
+				success: false,
+				message: "no account found with this email"
+			})
+			return
+		}
+
+		const passCheck = comparePass(password, vendorSearch?.password!)
+
+		if (!passCheck) {
+			res.status(400).send({
+				success: false,
+				message: "incorrect email or password"
+			})
+			return
+		}
+
+		const token = createToken({
+			id: vendorSearch?._id.toString(),
+			type: "vendor"
+		})
+
+		res.status(200).send({
+			success: true,
+			message: "vendor login successfull",
+			token
+		})
 
 	} catch (error) {
 		console.log(error)
@@ -88,13 +126,18 @@ export const vendorRegister = async (req: Request, res: Response) => {
 			email
 		}).save()
 
+		res.status(200).send({
+			success: true,
+			message: "vendor registered successfully",
+		})
+
 	} catch (error) {
 		console.log(error)
 		handle500ServerError(res)
 	}
 }
 
-export const staffLogin = (req: Request, res: Response) => {
+export const staffLogin = async (req: Request, res: Response) => {
 	try {
 		const { username, password, shopId } = req.body
 
@@ -106,6 +149,37 @@ export const staffLogin = (req: Request, res: Response) => {
 
 			return
 		}
+
+		const staffSearch = await StaffModel.findOne({ username, shop: shopId })
+
+		if (!staffSearch) {
+			res.status(400).send({
+				success: false,
+				message: "incorrect username or shopId"
+			})
+			return
+		}
+
+		const passCheck = comparePass(password, staffSearch.password)
+
+		if (!passCheck) {
+			res.status(400).send({
+				success: false,
+				message: "incorrect password"
+			})
+			return
+		}
+
+		const token = createToken({
+			id: staffSearch._id,
+			type: "staff"
+		})
+
+		res.status(200).send({
+			success: true,
+			message: "staff login successfull",
+			token
+		})
 
 	} catch (error) {
 		console.log(error)

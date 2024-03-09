@@ -25,13 +25,14 @@ const inputStyle: className = "border-2 rounded-lg py-2 px-3 border-primary"
 const Register = () => {
 
 	const { register, handleSubmit, formState: { errors } } = useForm<formType>({ resolver: zodResolver(formSchema) })
-	const rouer = useRouter()
+	const router = useRouter()
 
 	const onSubmit = async (data: formType) => {
 		try {
 			const response = await api.post("/auth/vendor/register", data)
 			if (response.data.success) {
 				console.log(response.data.message)
+				router.push("/login")
 			} else {
 				toast.error(response.data.message)
 			}

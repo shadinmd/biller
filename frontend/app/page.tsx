@@ -19,8 +19,8 @@ const Page = () => {
 					<img src="/hero-1.png" alt="hero image 1" />
 				</div>
 			</div>
-			<div className="flex flex-col items-center w-full py-10 bg-custom-offwhite">
-				<p className="text-primary font-bold">Discover the key features</p>
+			<div className="flex flex-col gap-10 items-center w-full py-10 bg-custom-offwhite">
+				<p className="text-primary font-bold text-xl">Discover the key features</p>
 				<div className="flex gap-10 justify-between">
 					<div className="flex flex-col items-start p-16 rounded-lg shadow-2xl bg-white text-black">
 						<div className="h-full flex flex-col items-start">

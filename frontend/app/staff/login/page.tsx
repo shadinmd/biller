@@ -24,7 +24,8 @@ const Login = () => {
 		try {
 			const response = await api.post("/auth/staff/login", data)
 			if (response.data.success) {
-				console.log(response.data)
+				localStorage.setItem("staff-token", response.data.token)
+				router.push("/staff")
 			} else {
 				toast.error(response.data.message)
 			}
