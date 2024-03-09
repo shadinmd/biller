@@ -7,7 +7,7 @@ interface ProductInterface {
 	price: number
 	stock: number
 	sold: number
-	barcode: number
+	barcode:string 
 	profit: number
 	createdAt: Date
 }

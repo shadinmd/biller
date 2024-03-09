@@ -1,4 +1,5 @@
 interface PlanInterface {
+	_id: string,
 	name: string
 	description: string
 	price: number
@@ -7,7 +8,7 @@ interface PlanInterface {
 	features: string[]
 	productLimit: number
 	staffLimit: number
-	shopLimitt: number
+	shopLimit: number
 }
 
 export default PlanInterface
