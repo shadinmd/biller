@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { handle500ServerError } from "../libs/error.handlers"
+import { handle500ServerError } from "../lib/error.handlers"
 import AdminModel from "../models/admin.model"
 import VendorModel from "../models/vendor.model"
-import { comparePass, createToken, hashPass } from "../libs/auth"
+import { comparePass, createToken, hashPass } from "../lib/auth"
 import StaffModel from "../models/staff.model"
 
 export const adminLogin = async (req: Request, res: Response) => {

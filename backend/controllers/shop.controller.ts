@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { handle500ServerError } from "../libs/error.handlers";
+import { handle500ServerError } from "../lib/error.handlers";
 import shopModel from "../models/shop.model";
-import { decodeToken } from "../libs/auth";
+import { decodeToken } from "../lib/auth";
 
 export const createShop = async (req: Request, res: Response) => {
 	try {

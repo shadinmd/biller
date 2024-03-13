@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
-import { handle500ServerError } from "../libs/error.handlers"
-import { decodeToken } from "../libs/auth"
+import { handle500ServerError } from "../lib/error.handlers"
+import { decodeToken } from "../lib/auth"
 
 type userTypes = "admin" | "staff" | "vendor" | "manager"
 

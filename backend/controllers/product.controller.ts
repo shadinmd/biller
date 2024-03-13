@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { handle500ServerError } from "../libs/error.handlers"
+import { handle500ServerError } from "../lib/error.handlers"
 import ProductModel from "../models/product.model"
 
 export const createProduct = async (req: Request, res: Response) => {

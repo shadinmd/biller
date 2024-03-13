@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { handle500ServerError } from "../libs/error.handlers"
+import { handle500ServerError } from "../lib/error.handlers"
 import StaffModel from "../models/staff.model"
 
 export const createStaff = async (req: Request, res: Response) => {

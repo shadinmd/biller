@@ -1,4 +1,4 @@
-import { handle500ServerError } from "../libs/error.handlers"
+import { handle500ServerError } from "../lib/error.handlers"
 import { Request, Response } from "express"
 import PlanModel from "../models/plan.model"
 

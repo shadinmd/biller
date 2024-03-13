@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { handle500ServerError } from "../libs/error.handlers";
+import { handle500ServerError } from "../lib/error.handlers";
 import VendorModel from "../models/vendor.model";
 import PlanModel from "../models/plan.model";
 
