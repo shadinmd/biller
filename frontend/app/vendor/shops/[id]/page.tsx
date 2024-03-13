@@ -1,7 +1,7 @@
 "use client"
 import { Separator } from '@/components/shadcn/Seperator'
 import NewProduct from '@/components/vendor/NewProduct'
-import api, { handleAxiosError } from '@/lib/api'
+import { handleAxiosError, vendorApi } from '@/lib/api'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -22,7 +22,7 @@ const Shop = ({ params }: Props) => {
 	const [products, setProducts] = useState<ProductInterface[]>([])
 
 	useEffect(() => {
-		api.get(`/shop/${params.id}`)
+		vendorApi.get(`/shop/${params.id}`)
 			.then(({ data }) => {
 				if (data.success) {
 					setShop(data.shop)

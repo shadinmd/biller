@@ -1,6 +1,6 @@
 "use client"
 
-import api, { handleAxiosError } from "@/lib/api"
+import api, { handleAxiosError, vendorApi } from "@/lib/api"
 import { useEffect, useState } from "react"
 import ShopInterface from "types/shop.interface"
 import { Icon } from "@iconify/react"
@@ -16,7 +16,7 @@ const Shops = () => {
 	const [search, setSearch] = useState("")
 
 	useEffect(() => {
-		api.get("/shop")
+		vendorApi.get("/shop")
 			.then(({ data }) => {
 				if (data.success) {
 					setShops(data.shops)
@@ -63,7 +63,7 @@ const Shops = () => {
 							<p>{e.active ? "active" : "inactive"}</p>
 							<p>{moment(e.createdAt).format("DD/MM/YYYY")}</p>
 						</Link>
-						<Separator key={-i - 1} orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
+						<Separator key={shops.length + i} orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
 					</>
 				))}
 			</div>

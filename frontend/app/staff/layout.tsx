@@ -1,8 +1,9 @@
 "use client"
 import { ReactNode } from "react"
 import { useEffect } from "react"
-import { usePathname } from "next/navigation"
+import { redirect, usePathname } from "next/navigation"
 import Sidebar from "@/components/shared/Sidebar"
+import api from "@/lib/api"
 
 const links: { title: string, to: string, icon: string }[] = [
 	{ title: "Dashboard", to: "/staff", icon: "mdi:home" },
@@ -12,13 +13,20 @@ const links: { title: string, to: string, icon: string }[] = [
 ]
 
 const Layout = ({ children }: { children: ReactNode }) => {
+
 	const path = usePathname()
 
 	useEffect(() => {
-		// if (path != "/staff/login")
-		// 	if (!localStorage.getItem("staff-token")) {
-		// 		redirect("/staff/login")
-		// 	}
+		if (path != "/staff/login") {
+			if (localStorage.getItem("staff-token")) {
+				api.interceptors.request.use(request => {
+					request.headers.Authorization = localStorage.getItem("staff-token")
+					return request
+				})
+			} else {
+				redirect("/staff/login")
+			}
+		}
 	}, [path])
 
 	return (

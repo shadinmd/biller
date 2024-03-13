@@ -1,5 +1,5 @@
 "use client"
-import api, { handleAxiosError } from '@/lib/api'
+import { adminApi, handleAxiosError } from '@/lib/api'
 import cn from '@/lib/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -33,7 +33,7 @@ const NewPlan = () => {
 	}
 	const onSubmit = async (data: formType) => {
 		try {
-			const response = await api.post("/admin/plan", data)
+			const response = await adminApi.post("/admin/plan", data)
 			if (response.data.success) {
 				router.push("/admin/plans")
 			} else {
