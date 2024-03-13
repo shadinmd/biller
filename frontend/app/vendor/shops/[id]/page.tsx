@@ -1,13 +1,11 @@
 "use client"
-import { Separator } from '@/components/shadcn/Seperator'
-import NewProduct from '@/components/vendor/NewProduct'
+import Products from '@/components/vendor/shop/Products'
+import Staffs from '@/components/vendor/shop/Staffs'
 import { handleAxiosError, vendorApi } from '@/lib/api'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import ProductInterface from 'types/product.interface'
 import ShopInterface from 'types/shop.interface'
-import StaffInterface from 'types/staff.interface'
 
 interface Props {
 	params: {
@@ -18,8 +16,6 @@ interface Props {
 const Shop = ({ params }: Props) => {
 
 	const [shop, setShop] = useState<ShopInterface>()
-	const [staffs, setStaffs] = useState<StaffInterface[]>([])
-	const [products, setProducts] = useState<ProductInterface[]>([])
 
 	useEffect(() => {
 		vendorApi.get(`/shop/${params.id}`)
@@ -34,29 +30,7 @@ const Shop = ({ params }: Props) => {
 				handleAxiosError(error)
 			})
 
-		api.get(`/staff/${params.id}`)
-			.then(({ data }) => {
-				if (data.success) {
-					setStaffs(data.staffs)
-				} else {
-					toast.error(data.message)
-				}
-			})
-			.catch(error => {
-				handleAxiosError(error)
-			})
 
-		api.get(`/product/${params.id}`)
-			.then(({ data }) => {
-				if (data.success) {
-					setProducts(data.products)
-				} else {
-					toast.error(data.message)
-				}
-			})
-			.catch(error => {
-				handleAxiosError(error)
-			})
 	}, [params.id])
 
 	return (
@@ -106,56 +80,18 @@ const Shop = ({ params }: Props) => {
 							<Icon icon={"material-symbols:contract"} className="text-white text-2xl" />
 						</div>
 					</div>
-
 				</div>
 			</div>
+
 			<div>
-
+				search here
 			</div>
+
 			<div className='flex gap-5 w-full h-full'>
-
-				<div className='flex flex-col gap-2 py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
-					<div className='flex justify-between'>
-						<p className='text-xl font-bold'>Products</p>
-						<NewProduct shopId={params.id}>
-							<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
-						</NewProduct>
-					</div>
-					<div className='flex text-custom-light-gray justify-between w-full'>
-						<p>Name</p>
-						<p>price</p>
-						<p>profit</p>
-					</div>
-					<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-					{products.map((e, i) => (
-						<>
-							<div className='flex items-center justify-between w-full' key={i}>
-								<p>{e.name}</p>
-								<p>{e.price}</p>
-								<p>{e.profit}</p>
-							</div>
-							<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-						</>
-					))}
-				</div>
-
-				<div className='flex flex-col gap-2 py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
-					<p className='text-xl font-bold'>Staffs</p>
-					<div className='flex text-custom-light-gray items-center justify-between w-full'>
-						<p>username</p>
-					</div>
-					<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-					{staffs.map((e, i) => (
-						<>
-							<div key={i}>
-								<p>{e.username}</p>
-							</div>
-							<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-						</>
-					))}
-				</div>
-
+				<Products id={params.id} />
+				<Staffs id={params.id} />
 			</div>
+
 		</div>
 	)
 }
