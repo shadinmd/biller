@@ -1,5 +1,6 @@
 "use client"
-import { adminApi, handleAxiosError } from '@/lib/api'
+import { handleAxiosError } from '@/lib/api'
+import { adminApi } from '@/lib/adminApi'
 import cn from '@/lib/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'

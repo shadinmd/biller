@@ -1,6 +1,7 @@
 "use client"
 
-import api, { handleAxiosError, vendorApi } from "@/lib/api"
+import { handleAxiosError } from "@/lib/api"
+import { vendorApi } from "@/lib/vendorApi"
 import { useEffect, useState } from "react"
 import ShopInterface from "types/shop.interface"
 import { Icon } from "@iconify/react"
@@ -20,6 +21,7 @@ const Shops = () => {
 			.then(({ data }) => {
 				if (data.success) {
 					setShops(data.shops)
+					console.log(data.shops)
 				} else {
 					toast.error(data.message)
 				}

@@ -1,6 +1,7 @@
 "use client"
 
-import api, { handleAxiosError } from "@/lib/api"
+import { handleAxiosError } from "@/lib/api"
+import { adminApi } from "@/lib/adminApi"
 import cn from "@/lib/cn"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ReactNode, useEffect, useState } from "react"
@@ -40,7 +41,7 @@ const EditPlan = ({ params }: Props) => {
 	}
 
 	useEffect(() => {
-		api.get(`/admin/plan/${params.id}`)
+		adminApi.get(`/admin/plan/${params.id}`)
 			.then(({ data }) => {
 				if (data.success) {
 					console.log(data.plan)
@@ -56,7 +57,7 @@ const EditPlan = ({ params }: Props) => {
 
 	const onSubmit = async (data: formType) => {
 		try {
-			const response = await api.put(`/admin/plan/${params.id}`, { ...data, _id: params.id })
+			const response = await adminApi.put(`/admin/plan/${params.id}`, { ...data, _id: params.id })
 
 			if (response.data.success) {
 				toast.success(response.data.message)

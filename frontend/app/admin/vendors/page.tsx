@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { Icon } from "@iconify/react"
 import { Separator } from "@/components/shadcn/Seperator"
 import VendorInterface from "types/vendor.interface"
-import api, { handleAxiosError } from "@/lib/api"
+import { handleAxiosError } from "@/lib/api"
+import { adminApi } from "@/lib/adminApi"
 import { toast } from "sonner"
 import Link from "next/link"
 
@@ -17,7 +18,7 @@ const Vendors = () => {
 	}
 
 	useEffect(() => {
-		api.get("/admin/vendor")
+		adminApi.get("/admin/vendor")
 			.then(({ data }) => {
 				if (data.success) {
 					setVendors(data.vendors)

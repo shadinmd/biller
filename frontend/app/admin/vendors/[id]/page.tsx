@@ -1,6 +1,7 @@
 "use client"
 
-import api, { handleAxiosError } from "@/lib/api"
+import { handleAxiosError } from "@/lib/api"
+import { adminApi } from "@/lib/adminApi"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -15,7 +16,7 @@ const Vendor = ({ params: { id } }: Props) => {
 	const [vendor, setVendor] = useState<VendorInterface>()
 
 	useEffect(() => {
-		api.get(`/admin/vendor/${id}`)
+		adminApi.get(`/admin/vendor/${id}`)
 			.then(({ data }) => {
 				if (data.success) {
 					setVendor(data.vendor)
@@ -30,7 +31,7 @@ const Vendor = ({ params: { id } }: Props) => {
 
 	const blockVendor = async () => {
 		try {
-			const { data } = await api.post(`/admin/vendor/block`, { id, blocked: vendor?.blocked ? false : true })
+			const { data } = await adminApi.post(`/admin/vendor/block`, { id, blocked: vendor?.blocked ? false : true })
 			if (data.success) {
 				toast.success(data.message)
 				let temp = { ...vendor }

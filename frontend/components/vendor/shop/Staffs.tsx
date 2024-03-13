@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react"
 import StaffInterface from "types/staff.interface"
 import { Separator } from "@/components/shadcn/Seperator"
-import { vendorApi, handleAxiosError } from "@/lib/api"
+import { handleAxiosError } from "@/lib/api"
+import { vendorApi } from "@/lib/vendorApi"
 import { toast } from "sonner"
 
 interface Props {

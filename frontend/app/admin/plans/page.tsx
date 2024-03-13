@@ -2,11 +2,11 @@
 import Select from "@/components/shared/Select"
 import { useEffect, useState } from "react"
 import PlanInterface from "types/plan.interface"
-import api from "@/lib/api"
 import { toast } from "sonner"
 import { handleAxiosError } from "@/lib/api"
 import { Icon } from "@iconify/react"
 import Link from "next/link"
+import { adminApi } from "@/lib/adminApi"
 
 const Plans = () => {
 
@@ -14,7 +14,7 @@ const Plans = () => {
 	const [search, setSearch] = useState("")
 
 	useEffect(() => {
-		api.get("/admin/plan")
+		adminApi.get("/admin/plan")
 			.then(({ data }) => {
 				if (data.success) {
 					setPlans(data.plans)

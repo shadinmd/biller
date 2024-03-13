@@ -1,7 +1,8 @@
 "use client"
 import Products from '@/components/vendor/shop/Products'
 import Staffs from '@/components/vendor/shop/Staffs'
-import { handleAxiosError, vendorApi } from '@/lib/api'
+import { handleAxiosError } from '@/lib/api'
+import { vendorApi } from '@/lib/vendorApi'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
