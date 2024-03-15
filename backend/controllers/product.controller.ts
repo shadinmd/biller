@@ -34,6 +34,32 @@ export const createProduct = async (req: Request, res: Response) => {
 	}
 }
 
+export const getProductDetails = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+
+		const product = await ProductModel.findById(id)
+
+		if (!product) {
+			res.status(400).send({
+				success: false,
+				message: "no product found"
+			})
+			return
+		}
+
+		res.status(200).send({
+			success: true,
+			message: "product details fetched",
+			product
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
 export const getAllProductsbyShop = async (req: Request, res: Response) => {
 	try {
 
