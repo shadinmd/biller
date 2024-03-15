@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import { decodeToken } from "../lib/auth"
+import AdminModel from "../models/admin.model"
+import VendorModel from "../models/vendor.model"
+import StaffModel from "../models/staff.model"
 
 type userTypes = "admin" | "staff" | "vendor" | "manager"
 
 const authorizationMiddleware = (...types: userTypes[]): (req: Request, res: Response, next: NextFunction) => void => {
-	return (req: Request, res: Response, next: NextFunction) => {
+	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const token = req.headers.authorization
 
@@ -34,9 +37,30 @@ const authorizationMiddleware = (...types: userTypes[]): (req: Request, res: Res
 					success: false,
 					message: "you are un authorized",
 					error: "unauthorized",
-					types
 				})
 				return
+			}
+
+			if (payload.type == "vendor") {
+				const vendorSearch = await VendorModel.findById(payload.id)
+
+				if (!vendorSearch) {
+					res.status(400).send({
+						success: false,
+						message: "account not found",
+						error: "notfound"
+					})
+					return
+				}
+
+				if (vendorSearch?.blocked) {
+					res.status(400).send({
+						success: false,
+						message: "this account is blocked",
+						error: "blocked"
+					})
+					return
+				}
 			}
 
 			next()
@@ -44,6 +68,21 @@ const authorizationMiddleware = (...types: userTypes[]): (req: Request, res: Res
 			console.log(error)
 			handle500ServerError(res)
 		}
+	}
+}
+
+const searchUser = async ({ id, type }: { id: string, type: userTypes }) => {
+
+	if (type == "admin") {
+		return await AdminModel.findById(id)
+	}
+
+	if (type == "vendor") {
+		return await VendorModel.findById(id)
+	}
+
+	if (type == "staff" || type == "manager") {
+		return await StaffModel.findById(id)
 	}
 }
 
