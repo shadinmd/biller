@@ -75,6 +75,14 @@ export const vendorLogin = async (req: Request, res: Response) => {
 			return
 		}
 
+		if (vendorSearch.blocked) {
+			res.status(400).send({
+				success: false,
+				message: "this account is blocked"
+			})
+			return
+		}
+
 		const passCheck = comparePass(password, vendorSearch?.password!)
 
 		if (!passCheck) {
@@ -155,7 +163,7 @@ export const staffLogin = async (req: Request, res: Response) => {
 		if (!staffSearch) {
 			res.status(400).send({
 				success: false,
-				message: "incorrect username or shopId"
+				message: "could not find staff account"
 			})
 			return
 		}
