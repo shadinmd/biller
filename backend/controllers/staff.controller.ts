@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import StaffModel from "../models/staff.model"
+import { hashPass } from "../lib/auth"
 
 export const createStaff = async (req: Request, res: Response) => {
 	try {
@@ -24,10 +25,12 @@ export const createStaff = async (req: Request, res: Response) => {
 			return
 		}
 
+		const hashedPass = hashPass(password)
+
 		const newStaff = await new StaffModel({
 			shop: shopId,
 			username,
-			password,
+			password: hashedPass,
 			manager: manager ? true : false
 		}).save()
 
@@ -35,6 +38,32 @@ export const createStaff = async (req: Request, res: Response) => {
 			success: true,
 			message: "staff created successfully",
 			staff: newStaff
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getStaffDetails = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+
+		const staff = await StaffModel.findById(id)
+
+		if (!staff) {
+			res.status(400).send({
+				success: false,
+				message: "staff not found"
+			})
+			return
+		}
+
+		res.status(200).send({
+			success: true,
+			message: "staff details fetched",
+			staff
 		})
 
 	} catch (error) {
