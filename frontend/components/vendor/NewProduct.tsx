@@ -5,10 +5,13 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
+import ProductInterface from "types/product.interface"
+import { vendorApi } from "@/lib/vendorApi"
 
 interface Props {
 	children: ReactNode,
-	shopId: string
+	shopId: string,
+	newProduct: (product: ProductInterface) => void
 }
 
 const formSchema = z.object({
@@ -23,16 +26,17 @@ type className = string
 
 const inputStyle: className = "border-2 border-primary px-3 py-1 rounded-lg outline-none"
 
-const NewProduct = ({ children, shopId }: Props) => {
+const NewProduct = ({ children, shopId, newProduct }: Props) => {
 
 	const { register, handleSubmit, formState: { errors } } = useForm<formType>({ resolver: zodResolver(formSchema) })
 	const [open, setOpen] = useState(false)
 
 	const onSubmit = async (data: formType) => {
 		try {
-			const response = await api.post("/product", { shopId, ...data })
+			const response = await vendorApi.post("/product", { shopId, ...data })
 			if (response.data.success) {
 				toast.success(response.data.message)
+				newProduct(response.data.product)
 				setOpen(false)
 			} else {
 				toast.error(response.data.message)

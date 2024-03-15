@@ -1,4 +1,5 @@
 interface ProductInterface {
+	_id: string
 	name: string
 	image: string
 	brand: string

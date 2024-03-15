@@ -7,6 +7,7 @@ import { vendorApi } from "@/lib/vendorApi"
 import { useEffect, useState } from "react"
 import ProductInterface from "types/product.interface"
 import { Separator } from "@/components/shadcn/Seperator"
+import Link from "next/link"
 
 interface Props {
 	id: string
@@ -17,7 +18,7 @@ const Products = ({ id }: Props) => {
 	const [products, setProducts] = useState<ProductInterface[]>([])
 
 	useEffect(() => {
-		vendorApi.get(`/product/${id}`)
+		vendorApi.get(`/product/shop/${id}`)
 			.then(({ data }) => {
 				if (data.success) {
 					setProducts(data.products)
@@ -30,11 +31,15 @@ const Products = ({ id }: Props) => {
 			})
 	}, [id])
 
+	const newProduct = (product: ProductInterface) => {
+		setProducts(products => [...products, product])
+	}
+
 	return (
 		<div className='flex flex-col gap-2 py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
 			<div className='flex justify-between'>
 				<p className='text-xl font-bold'>Products</p>
-				<NewProduct shopId={id}>
+				<NewProduct shopId={id} newProduct={newProduct}>
 					<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
 				</NewProduct>
 			</div>
@@ -46,11 +51,11 @@ const Products = ({ id }: Props) => {
 			<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
 			{products.map((e, i) => (
 				<>
-					<div className='flex items-center justify-between w-full' key={i}>
+					<Link href={`/vendor/shops/${id}/p/${e?._id}`} className='flex items-center justify-between w-full' key={i}>
 						<p>{e.name}</p>
 						<p>{e.price}</p>
 						<p>{e.profit}</p>
-					</div>
+					</Link>
 					<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
 				</>
 			))}

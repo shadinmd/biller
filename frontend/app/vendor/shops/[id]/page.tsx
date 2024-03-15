@@ -4,7 +4,7 @@ import Staffs from '@/components/vendor/shop/Staffs'
 import { handleAxiosError } from '@/lib/api'
 import { vendorApi } from '@/lib/vendorApi'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ShopInterface from 'types/shop.interface'
 
@@ -31,15 +31,28 @@ const Shop = ({ params }: Props) => {
 				handleAxiosError(error)
 			})
 
-
 	}, [params.id])
+
+	const copyId = useCallback(async () => {
+		await navigator.clipboard.writeText(shop?._id!)
+		toast.success("id copied")
+	}, [shop?._id])
 
 	return (
 		<div className='flex flex-col gap-3 items-start justify-center h-full w-full'>
 			<div className='flex gap-5 w-full h-44'>
+
 				<div className='w-full h-full bg-white rounded-lg drop-shadow-lg p-3'>
-					<p className='text-xl font-bold'>{shop?.name}</p>
+					<div className='flex flex-col'>
+						<p className='text-xl font-bold'>{shop?.name}</p>
+						<div className='flex items-center gap-2'>
+							<p>id:</p>
+							<p className='font-bold'>{shop?._id}</p>
+							<Icon icon={'solar:copy-bold'} onClick={copyId} className='text-custom-gray cursor-pointer' />
+						</div>
+					</div>
 				</div>
+
 				<div className='grid gap-5 grid-cols-2 grid-rows-2 w-full h-full'>
 
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
