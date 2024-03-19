@@ -41,6 +41,28 @@ const authorizationMiddleware = (...types: userTypes[]): (req: Request, res: Res
 				return
 			}
 
+			if (payload.type == "staff" || payload.type == "manager") {
+				const staffSearch = await StaffModel.findById(payload.id)
+
+				if (!staffSearch) {
+					res.status(400).send({
+						successs: false,
+						message: "account not found",
+						error: "notfound"
+					})
+					return
+				}
+
+				if (staffSearch.blocked) {
+					res.status(400).send({
+						success: false,
+						message: "your account is blocked",
+						error: "blocked"
+					})
+					return
+				}
+			}
+
 			if (payload.type == "vendor") {
 				const vendorSearch = await VendorModel.findById(payload.id)
 
