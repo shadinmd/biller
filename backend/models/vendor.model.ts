@@ -15,6 +15,14 @@ const vendorSchema = new mongoose.Schema<vendorInterface>({
 		required: true,
 		unique: true
 	},
+	verified: {
+		type: Boolean,
+		default: false
+	},
+	verificationToken: {
+		type: String,
+		required: true
+	},
 	activePlan: {
 		type: String,
 		default: ""

@@ -4,7 +4,6 @@ import { toast } from "sonner";
 
 const api = axios.create({ baseURL: "http://localhost:8000/api" })
 
-
 export const handleAxiosError = (error: any) => {
 	if (isAxiosError(error)) {
 		if (error.response?.data.message)

@@ -11,10 +11,10 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 const formSchema = z.object({
-	username: z.string(),
-	email: z.string(),
-	password: z.string(),
-	confirmPassword: z.string()
+	username: z.string().min(1, { message: "This field is required" }).refine(val => !val.includes(" ")),
+	email: z.string().email({ message: "Enter a valid email" }),
+	password: z.string().min(1, { message: "This field is required" }).refine(val => !val.includes(" ")),
+	confirmPassword: z.string().min(1, { message: "This field is required" }).refine(val => !val.includes(" "))
 })
 
 type formType = z.infer<typeof formSchema>
@@ -32,7 +32,7 @@ const Register = () => {
 			const response = await api.post("/auth/vendor/register", data)
 			if (response.data.success) {
 				console.log(response.data.message)
-				router.push("/login")
+				router.push(`/verify?email=${data.email}`)
 			} else {
 				toast.error(response.data.message)
 			}

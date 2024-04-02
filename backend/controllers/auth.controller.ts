@@ -2,8 +2,10 @@ import { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import AdminModel from "../models/admin.model"
 import VendorModel from "../models/vendor.model"
-import { comparePass, createToken, hashPass } from "../lib/auth"
+import { comparePass, createToken, decodeToken, hashPass } from "../lib/auth"
 import StaffModel from "../models/staff.model"
+import crypto from "node:crypto"
+import { sendOtpMail } from "../lib/mailer"
 
 export const adminLogin = async (req: Request, res: Response) => {
 	try {
@@ -126,13 +128,21 @@ export const vendorRegister = async (req: Request, res: Response) => {
 			return
 		}
 
+		//@ts-ignore
+		const verificationToken = crypto.hash("sha1", username)
+		console.log(verificationToken)
+
 		const hashedPassword = hashPass(password)
 
 		await new VendorModel({
 			username,
 			password: hashedPassword,
-			email
+			email,
+			verificationToken
 		}).save()
+
+		const FRONT_URL = process.env.FRONT_URL
+		sendOtpMail(email, `${FRONT_URL}/verify?token=${verificationToken}`)
 
 		res.status(200).send({
 			success: true,
@@ -180,7 +190,7 @@ export const staffLogin = async (req: Request, res: Response) => {
 
 		const token = createToken({
 			id: staffSearch._id,
-			type: "staff"
+			type: staffSearch.manager ? "manager" : "staff"
 		})
 
 		res.status(200).send({
@@ -188,6 +198,88 @@ export const staffLogin = async (req: Request, res: Response) => {
 			message: "staff login successfull",
 			token
 		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const vendorVerify = async (req: Request, res: Response) => {
+	try {
+		const { token } = req.body
+
+		if (!token) {
+			res.status(400).send({
+				success: false,
+				message: "token not provided"
+			})
+			return
+		}
+
+		const response = await VendorModel.updateOne({ verificationToken: token }, { $set: { verified: true } })
+
+		if (response.matchedCount < 0) {
+			res.status(400).send({
+				success: false,
+				message: "user not found"
+			})
+			return
+		}
+
+		if (response.modifiedCount < 0) {
+			res.status(500).send({
+				success: false,
+				message: "failed to updated verification status please try again"
+			})
+			return
+		}
+
+		res.status(200).send({
+			success: true,
+			message: "account verified successfully"
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const vendorSendOtp = async (req: Request, res: Response) => {
+	try {
+		const { email } = req.body
+
+		const vendorSearch = await VendorModel.findOne({ email })
+
+		if (!vendorSearch) {
+			res.status(400).send({
+				success: false,
+				message: "user with this email doesn't exist"
+			})
+			return
+		}
+
+		const FRONT_URL = process.env.FRONT_URL
+		sendOtpMail(email, `${FRONT_URL}/verify?token=${vendorSearch.verificationToken}`)
+
+		res.status(200).send({
+			success: true,
+			message: "email send successfully"
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const vendorForgot = async (req: Request, res: Response) => {
+	try {
+		const token = req.headers.authorization
+		const { id } = decodeToken(token!) as { id: string }
+		const { } = req.body
+
 
 	} catch (error) {
 		console.log(error)

@@ -31,7 +31,7 @@ const planSchema = new mongoose.Schema<PlanInterface>({
 		type: Number,
 		required: true
 	},
-	staffLimit: {
+	billLimit: {
 		type: Number,
 		required: true
 	},

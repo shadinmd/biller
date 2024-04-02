@@ -17,6 +17,10 @@ const staffSchema = new mongoose.Schema<staffInterface>({
 	manager: {
 		type: Boolean,
 		default: false
+	},
+	blocked: {
+		type: Boolean,
+		default: false
 	}
 })
 

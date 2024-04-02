@@ -146,11 +146,18 @@ export const createPlan = async (req: Request, res: Response) => {
 			active,
 			features,
 			productLimit,
-			staffLimit,
+			billLimit,
 			shopLimit
 		} = req.body
 
-		if (!name || !description || !price || !productLimit || !shopLimit || !staffLimit) {
+		if (
+			!name ||
+			!description ||
+			typeof price != "number" ||
+			typeof productLimit != "number" ||
+			typeof shopLimit != "number" ||
+			typeof billLimit != "number"
+		) {
 			res.status(400).send({
 				success: false,
 				message: "plese fil all fields"
@@ -175,7 +182,7 @@ export const createPlan = async (req: Request, res: Response) => {
 			active,
 			features,
 			productLimit,
-			staffLimit,
+			billLimit,
 			shopLimit
 		}).save()
 

@@ -15,7 +15,7 @@ const Footer = () => {
 						<Icon icon={"mdi:linkedin"} className="text-xl" />
 					</Link>
 					<Link href="https://github.com/shadinmhd">
-						<Icon icon={'mdi:github'} className="text-xl"/>
+						<Icon icon={'mdi:github'} className="text-xl" />
 					</Link>
 				</div>
 			</div>

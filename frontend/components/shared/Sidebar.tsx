@@ -7,7 +7,7 @@ interface Props {
 
 const Sidebar = ({ items }: Props) => {
 	return (
-		<div className="flex flex-col gap-10 w-30 items-center justify-start h-full bg-custom-offwhite p-5">
+		<div className="flex flex-col gap-10 items-center justify-start h-full bg-custom-offwhite p-5">
 			<Link href={"/"} className="-tracking-widest text-primary font-extrabold text-4xl w-full">Biller</Link>
 			<div className="flex flex-col gap-2 items-center">
 				{

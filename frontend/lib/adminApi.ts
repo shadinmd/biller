@@ -3,9 +3,12 @@ import { toast } from "sonner"
 
 export const adminApi = axios.create({
 	baseURL: "http://localhost:8000/api",
-	headers: {
-		Authorization: localStorage.getItem("admin-token")
-	}
+})
+
+adminApi.interceptors.request.use(request => {
+	if (localStorage.getItem("admin-token"))
+		request.headers.Authorization = localStorage.getItem("admin-token")
+	return request
 })
 
 adminApi.interceptors.response.use(

@@ -17,7 +17,8 @@ const staffContext = createContext<Props>({
 		password: "",
 		shop: "",
 		blocked: false,
-		manager: false
+		manager: false,
+		createdAt: new Date()
 	},
 	fetchStaffDetails: () => { }
 })
@@ -31,7 +32,8 @@ export const StaffProvider = ({ children }: { children: ReactNode }) => {
 			password: "",
 			shop: "",
 			blocked: false,
-			manager: false
+			manager: false,
+			createdAt: new Date()
 		}
 	)
 

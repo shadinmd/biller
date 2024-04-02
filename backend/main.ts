@@ -10,6 +10,9 @@ import planRouter from "./routes/plan.route"
 import staffRouter from "./routes/staff.route"
 import shopRouter from "./routes/shop.route"
 import productRouter from "./routes/product.route"
+import billRouter from "./routes/bill.route"
+import subscriptionRoute from "./routes/subscription.route"
+import customerRoute from "./routes/customer.route"
 
 dotenv.config()
 
@@ -31,6 +34,9 @@ app.use("/api/plan", planRouter)
 app.use("/api/staff", staffRouter)
 app.use("/api/shop", shopRouter)
 app.use("/api/product", productRouter)
+app.use("/api/bill", billRouter)
+app.use("/api/subscribe", subscriptionRoute)
+app.use("/api/customer", customerRoute)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {

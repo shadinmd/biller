@@ -3,9 +3,12 @@ import { toast } from "sonner"
 
 export const staffApi = axios.create({
 	baseURL: "http://localhost:8000/api",
-	headers: {
-		Authorization: localStorage.getItem("staff-token")
-	}
+})
+
+staffApi.interceptors.request.use(request => {
+	if (localStorage.getItem("staff-token"))
+		request.headers.Authorization = localStorage.getItem("staff-token")
+	return request
 })
 
 staffApi.interceptors.response.use(

@@ -7,11 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { handleAxiosError } from '@/lib/api'
 import { AxiosInstance } from 'axios'
 import { toast } from 'sonner'
+import cn from '@/lib/cn'
 
 interface Props {
 	children: ReactNode,
 	api: AxiosInstance,
-	staffId: string
+	staffId: string,
+	className?: string
 }
 
 const formSchema = z.object({
@@ -29,7 +31,7 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-const ResetPassword = ({ children, api, staffId }: Props) => {
+const ResetPassword = ({ children, api, staffId, className }: Props) => {
 
 	const { register, formState: { errors }, handleSubmit } = useForm<formType>({ resolver: zodResolver(formSchema) })
 	const [open, setOpen] = useState(false)
@@ -50,7 +52,7 @@ const ResetPassword = ({ children, api, staffId }: Props) => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className='outline-none'>
+			<DialogTrigger className={cn('outline-none', className)}>
 				{children}
 			</DialogTrigger>
 			<DialogContent className='bg-white'>

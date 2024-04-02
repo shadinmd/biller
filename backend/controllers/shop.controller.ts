@@ -38,6 +38,7 @@ export const createShop = async (req: Request, res: Response) => {
 export const findShopsByVendor = async (req: Request, res: Response) => {
 	try {
 		const payload = decodeToken(req.headers.authorization!) as { id: string }
+		const { name } = req.query
 		const { id } = payload
 
 		if (!id) {
@@ -48,7 +49,15 @@ export const findShopsByVendor = async (req: Request, res: Response) => {
 			return
 		}
 
-		const shops = await shopModel.find({ vendor: id })
+		const query = {
+			name: {
+				$regex: name || "",
+				$options: "i"
+			},
+			vendor: id
+		}
+
+		const shops = await shopModel.find(query)
 
 		res.status(200).send({
 			success: true,
@@ -89,5 +98,20 @@ export const getShopDetails = async (req: Request, res: Response) => {
 	}
 }
 
-export const editShop = () => { }
-export const deleteShop = () => { }
+export const getShopCount = async (req: Request, res: Response) => {
+	try {
+		const payload = decodeToken(req.headers.authorization!) as { id: string }
+
+		const shops = await shopModel.countDocuments({ vendor: payload.id })
+
+		res.status(200).send({
+			success: true,
+			message: "successfully fetched shop count",
+			shops
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}

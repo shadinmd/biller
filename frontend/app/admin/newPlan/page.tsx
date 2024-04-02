@@ -16,7 +16,7 @@ const formSchema = z.object({
 	discount: z.number(),
 	active: z.boolean(),
 	productLimit: z.number().min(1, { message: "this value cannot be zero" }),
-	staffLimit: z.number().min(1, { message: "this value cannot be zero" }),
+	billLimit: z.number().min(1, { message: "this value cannot be zero" }),
 	shopLimit: z.number().min(1, { message: "this value cannot be zero" })
 })
 
@@ -34,6 +34,7 @@ const NewPlan = () => {
 	}
 	const onSubmit = async (data: formType) => {
 		try {
+			console.log(data)
 			const response = await adminApi.post("/admin/plan", data)
 			if (response.data.success) {
 				router.push("/admin/plans")
@@ -102,13 +103,13 @@ const NewPlan = () => {
 							className={inputStyle("productLimit")}
 						/>
 					</InputContainer>
-					<InputContainer name='Staff Limit' error={errors.staffLimit?.message}>
+					<InputContainer name='Bill Limit' error={errors.billLimit?.message}>
 						<input
-							{...register("staffLimit", { valueAsNumber: true })}
-							placeholder='Staff limit'
+							{...register("billLimit", { valueAsNumber: true })}
+							placeholder='Bill Limit'
 							defaultValue={0}
 							type="number"
-							className={inputStyle("staffLimit")}
+							className={inputStyle("billLimit")}
 						/>
 					</InputContainer>
 					<InputContainer name='shop Limit' error={errors.shopLimit?.message} >

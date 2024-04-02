@@ -1,5 +1,4 @@
 "use client"
-import Select from "@/components/shared/Select"
 import { useEffect, useState } from "react"
 import PlanInterface from "types/plan.interface"
 import { toast } from "sonner"
@@ -41,8 +40,6 @@ const Plans = () => {
 							className="w-full rounded-lg pr-3 outline-none"
 						/>
 					</div>
-					<Select items={["1", "2"]} onSelect={(e) => console.log(e)} />
-					<Select items={["1", "2"]} onSelect={(e) => console.log(e)} />
 				</div>
 				<div className="flex items-center">
 					<Link href={"/admin/newPlan"}>
@@ -67,8 +64,8 @@ const Plans = () => {
 								</div>
 							</div>
 							<div className="flex gap-1">
-								<p>Staff limit: </p>
-								<p>{e.staffLimit}</p>
+								<p>Bill limit: </p>
+								<p>{e.billLimit}</p>
 							</div>
 							<div className="flex gap-1">
 								<p>Shop limit: </p>

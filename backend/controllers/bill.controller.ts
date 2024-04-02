@@ -1,6 +1,10 @@
 import { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import BillModel from "../models/bill.model"
+import ProductModel from "../models/product.model"
+import shopModel from "../models/shop.model"
+import { decodeToken } from "../lib/auth"
+import CustomerModel from "../models/customer.model"
 
 export const createBill = async (req: Request, res: Response) => {
 	try {
@@ -10,16 +14,9 @@ export const createBill = async (req: Request, res: Response) => {
 			total,
 			discount,
 			totalAtfterDiscount,
-			products
+			products,
+			customer
 		} = req.body
-
-		console.log({
-			staff,
-			shop,
-			total,
-			discount,
-			totalAtfterDiscount
-		})
 
 		if (
 			!staff ||
@@ -35,14 +32,80 @@ export const createBill = async (req: Request, res: Response) => {
 			return
 		}
 
-		const newBill = await new BillModel({
+		const searchedProducts = await ProductModel.find({
+			_id: {
+				$in: products.map((e: { product: string }) => e.product)
+			}
+		})
+
+		const productsMap = new Map(searchedProducts.map((e) => [e._id.toString(), e]))
+
+		let points = 0
+
+		for (const item of products) {
+			const { product, quantity, point } = item
+			const productDoc = productsMap.get(product)
+			points += (quantity * point)
+
+			if (!productDoc || productDoc.stock < quantity) {
+				return res.status(400).send({
+					success: false,
+					message: `not enough stock for product ${productDoc?.name}`,
+				})
+			}
+		}
+
+		for (const item of products) {
+			const { product, quantity } = item
+			const productDoc = productsMap.get(product)
+			productDoc!.stock -= quantity
+			productDoc!.sold += quantity
+		}
+
+
+		await Promise.all(searchedProducts.map((e) => e.save()))
+
+		let billDetails = {
 			staff,
 			shop,
 			total,
 			discount,
 			products,
-			totalAtfterDiscount
-		}).save()
+			totalAtfterDiscount,
+			customer: ""
+		}
+
+		if (customer) {
+			console.log(customer)
+			const searchCustomer = await CustomerModel.findOne({})
+
+			if (!searchCustomer) {
+				res.status(400).send({
+					success: false,
+					message: "customer was not found"
+				})
+				return
+			}
+
+			if (discount > 0) {
+				if (searchCustomer.point < discount) {
+					res.status(400).send({
+						success: false,
+						message: "customer doesn't have sufficient points"
+					})
+					return
+				}
+				searchCustomer.point -= discount
+				await searchCustomer.save()
+			} else {
+				console.log(points)
+				searchCustomer.point += points
+				await searchCustomer.save()
+			}
+			billDetails.customer = customer
+		}
+
+		const newBill = await new BillModel(billDetails).save()
 
 		res.status(200).send({
 			success: true,
@@ -55,11 +118,11 @@ export const createBill = async (req: Request, res: Response) => {
 		handle500ServerError(res)
 	}
 }
+
 export const getBillsByShop = async (req: Request, res: Response) => {
 	try {
 
 		const { id } = req.params
-		console.log(id)
 
 		if (!id) {
 			res.status(400).send({
@@ -82,9 +145,9 @@ export const getBillsByShop = async (req: Request, res: Response) => {
 		handle500ServerError(res)
 	}
 }
+
 export const getBillsByStaff = (req: Request, res: Response) => {
 	try {
-
 
 	} catch (error) {
 		console.log(error)
@@ -129,12 +192,50 @@ export const getBillDetails = async (req: Request, res: Response) => {
 			return
 		}
 
-		const bill = await BillModel.findById(id)
+		const bill = await BillModel.findById(id).populate("products.product")
 
 		res.status(200).send({
 			success: true,
 			message: "bill details fetched successfully",
 			bill
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getNumofBillsbyshop = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+
+		const bills = await BillModel.countDocuments({ staff: id })
+
+		res.status(200).send({
+			success: true,
+			message: "number of bills fetched successfully",
+			bills
+		})
+
+	} catch (error) {
+		handle500ServerError(res)
+	}
+}
+
+export const getBillCountByVendor = async (req: Request, res: Response) => {
+	try {
+		const payload = decodeToken(req.headers.authorization!) as { id: string }
+
+		const shops = await shopModel.find({ vendor: payload.id })
+		const shopIds = shops.map(e => e._id.toString())
+
+		const count = await BillModel.countDocuments({ shop: { $in: shopIds } })
+
+		res.status(200).send({
+			success: true,
+			message: "fetched bill count",
+			count
 		})
 
 	} catch (error) {

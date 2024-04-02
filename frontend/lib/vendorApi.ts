@@ -15,8 +15,9 @@ vendorApi.interceptors.response.use(
 	(res) => res,
 	(error) => {
 		if (isAxiosError(error)) {
-
-			if (error?.response?.data?.error == "blocked") {
+			if (error.response?.data.error == "unverified") {
+				window.location.assign("/verify")
+			} else if (error?.response?.data?.error == "blocked") {
 				localStorage.removeItem("vendor-token")
 				window.location.assign("/login")
 

@@ -15,17 +15,16 @@ const Layout = ({ children }: { children: ReactNode }) => {
 	const path = usePathname()
 
 	useEffect(() => {
-		if(path != "/admin/login")
-		if (!localStorage.getItem("admin-token")) {
-			redirect("/admin/login")
-		}
+		if (path != "/admin/login")
+			if (!localStorage.getItem("admin-token")) {
+				redirect("/admin/login")
+			}
 	}, [path])
 
 	return (
 		<div className="flex items-center justify-center h-screen w-screen">
 			{path != "/admin/login" && <Sidebar items={links} />}
 			<div className="flex flex-col gap-5 h-full w-full bg-custom-offwhite p-5">
-				{path != "/admin/login" && <p className="text-custom-light-gray">{path}</p>}
 				{children}
 			</div>
 		</div>

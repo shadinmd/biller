@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 import { handleAxiosError } from '@/lib/api'
 import { Separator } from '@/components/shadcn/Seperator'
 import moment from 'moment'
-import { Icon } from '@iconify/react/dist/iconify.js'
 import Link from 'next/link'
 
 const Bills = () => {
@@ -45,43 +44,40 @@ const Bills = () => {
 	}
 
 	return (
-		<div className='flex flex-col gap-5 p-5 bg-white rounded-lg drop-shadow-lg w-full h-full'>
+		<div className='flex flex-col gap-5 p-5 bg-white rounded-lg drop-shadow-lg w-full h-full overflow-y-hidden'>
 			<div className='text-3xl font-bold'>Bills</div>
-			<div className='flex flex-col w-full'>
 
+			<div className='overflow-y-scroll'>
 				<div className='flex flex-col w-full'>
-					<div className='flex w-full text-custom-light-gray'>
-						<p className='w-full'>no</p>
-						<p className='w-full'>date</p>
-						<p className='w-full'>no of items</p>
-						<p className='w-full'>before discount</p>
-						<p className='w-full'>discount</p>
-						<p className='w-full'>total</p>
-						<p className='w-full'></p>
-					</div>
-					<Separator orientation='horizontal' className='bg-custom-light-gray' />
-				</div>
-
-				{bills.map((e, i) => (
-					<Link
-						href={`/staff/bills/${e._id}`}
-						key={i}
-						className='flex flex-col w-full'
-					>
-						<div className='flex items-center py-2 w-full'>
-							<p className='w-full'>{i + 1}</p>
-							<p className='w-full'>{moment(e.createdAt).format("DD/MM/YYYY")}</p>
-							<p className='w-full'>{e.products.length}</p>
-							<p className='w-full'>{e.total}</p>
-							<p className='w-full'>{e.discount}</p>
-							<p className='w-full'>{e.totalAtfterDiscount}</p>
-							<button onClick={(event) => { event.preventDefault(); deleteBill(e._id) }} className='w-full'>
-								<Icon icon={"mdi:trash"} className='text-red-500 text-2xl' />
-							</button>
+					<div className='flex flex-col w-full'>
+						<div className='flex w-full text-custom-light-gray'>
+							<p className='w-full'>no</p>
+							<p className='w-full'>date</p>
+							<p className='flex items-center justify-center w-full'>no of items</p>
+							<p className='w-full'>before discount</p>
+							<p className='w-full'>discount</p>
+							<p className='w-full'>total</p>
 						</div>
 						<Separator orientation='horizontal' className='bg-custom-light-gray' />
-					</Link>
-				))}
+					</div>
+					{bills.map((e, i) => (
+						<Link
+							href={`/staff/bills/${e._id}`}
+							key={i}
+							className='flex flex-col w-full'
+						>
+							<div className='flex items-center py-2 w-full'>
+								<p className='w-full'>{i + 1}</p>
+								<p className='w-full'>{moment(e.createdAt).format("HH:mm DD/MM/YYYY")}</p>
+								<p className='flex items-center justify-center w-full'>{e.products.length}</p>
+								<p className='w-full'>{e.total}</p>
+								<p className='w-full'>{e.discount}</p>
+								<p className='w-full'>{e.totalAtfterDiscount}</p>
+							</div>
+							<Separator orientation='horizontal' className='bg-custom-light-gray' />
+						</Link>
+					))}
+				</div>
 			</div>
 		</div>
 	)

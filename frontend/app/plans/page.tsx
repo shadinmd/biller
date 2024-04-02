@@ -26,9 +26,9 @@ const Plans = () => {
 			})
 	}, [])
 
-	const getStarted = () => {
+	const getStarted = (id: string) => {
 		if (localStorage.getItem("vendor-token"))
-			router.push("/vendor")
+			router.push(`/vendor/subscribe/${id}`)
 		else
 			router.push("/login")
 	}
@@ -44,19 +44,22 @@ const Plans = () => {
 								<p className="text-2xl font-bold">{[e.name[0].toUpperCase(), e.name.slice(1, e.name.length)]}</p>
 								<span className="w-full h-1 bg-primary rounded-full"></span>
 							</div>
-							<p className="text-3xl font-bold">₹{e.price}/M</p>
+							<div className="flex flex-col items-end">
+								<p className="text-3xl font-bold">₹{e.price - e.discount}/M</p>
+								<p className="font-bold line-through decoration-red-500">₹{e.price}/M</p>
+							</div>
 						</div>
 						<p className="text-lg break-words font-bold">
 							{e.description}
 						</p>
 						<ul className="flex list-disc pl-5 font-bold flex-col h-full">
-							<li>Maximum number of shops: {e.shopLimit}</li>
-							<li>Maximum number of staffs: {e.staffLimit}</li>
-							<li>Maximum number of producs: {e.productLimit}</li>
+							<li>Max shops: {e.shopLimit}</li>
+							<li>Max bills: {e.billLimit}</li>
+							<li>Max producs: {e.productLimit}</li>
 							<li>24/7 customer support</li>
 							<li>online data backup</li>
 						</ul>
-						<button onClick={() => getStarted()} className="bg-primary text-white px-6 py-2 font-bold rounded-full">
+						<button onClick={() => getStarted(e._id)} className="bg-primary text-white px-6 py-2 font-bold rounded-full">
 							Get started
 						</button>
 					</div>

@@ -6,19 +6,21 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
 import ProductInterface from "types/product.interface"
-import { staffApi } from "@/lib/staffApi"
+import { AxiosInstance } from "axios"
 
 interface Props {
 	children: ReactNode,
 	shopId: string,
-	newProduct: (product: ProductInterface) => void
+	newProduct: (product: ProductInterface) => void,
+	api: AxiosInstance
 }
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "this field cannot be empty" }),
-	barcode: z.string().min(1, { message: "this field cannot be empty" }),
-	price: z.number(),
-	profit: z.number()
+	barcode: z.string().min(1, { message: "this field cannot be empty" }).refine(val => !val.includes(" "), { message: "barcode must not contain spaces" }),
+	price: z.number().nonnegative({ message: "price cannot be negative" }),
+	profit: z.number().nonnegative({ message: "profit cannot be negative" }),
+	point: z.number().nonnegative({ message: "point cannot be negative" })
 }).superRefine(({ profit, price }, ctx) => {
 	if (profit > price) {
 		ctx.addIssue({
@@ -34,14 +36,23 @@ type className = string
 
 const inputStyle: className = "border-2 border-primary px-3 py-1 rounded-lg outline-none"
 
-const NewProduct = ({ children, shopId, newProduct }: Props) => {
+const NewProduct = ({ children, shopId, newProduct, api }: Props) => {
 
-	const { register, handleSubmit, formState: { errors } } = useForm<formType>({ resolver: zodResolver(formSchema) })
+	const { register, handleSubmit, formState: { errors } } = useForm<formType>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			name: "",
+			barcode: "",
+			price: 0,
+			profit: 0,
+			point: 0
+		}
+	})
 	const [open, setOpen] = useState(false)
 
 	const onSubmit = async (data: formType) => {
 		try {
-			const response = await staffApi.post("/product", { shopId, ...data })
+			const response = await api.post("/product", { shopId, ...data })
 			if (response.data.success) {
 				toast.success(response.data.message)
 				newProduct(response.data.product)
@@ -101,6 +112,13 @@ const NewProduct = ({ children, shopId, newProduct }: Props) => {
 							className={inputStyle}
 						/>
 						{errors.profit && <p className="text-red-500">{errors.profit.message}</p>}
+						<input
+							{...register("point", { valueAsNumber: true })}
+							placeholder="Point"
+							type="text"
+							className={inputStyle}
+						/>
+						{errors.point && <p className="text-red-500">{errors.point.message}</p>}
 						<button className="font-bold text-white bg-primary px-6 py-2 rounded-full" type="submit">
 							Create
 						</button>

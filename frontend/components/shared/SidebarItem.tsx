@@ -13,7 +13,7 @@ const SidebarItem = ({ title, to, icon }: Props) => {
 	const active = path == to
 
 	return (
-		<Link href={to} className={`${active ? `bg-white rounded-lg drop-shadow-lg ` : ``} px-4 py-3 w-full flex gap-5 pr-16 items-center`}>
+		<Link href={to} className={`${active ? `bg-white rounded-lg drop-shadow-lg ` : ``} px-2 py-2 md:px-4 md:py-3 w-full flex gap-5 pr-6 md:pr-16 items-center`}>
 			<div className={active ? `p-2 bg-primary rounded-lg` : `p-2 bg-white rounded-lg drop-shadow-lg`}>
 				<Icon icon={icon} className={`${active ? `text-white` : `text-primary`} text-2xl`} />
 			</div>

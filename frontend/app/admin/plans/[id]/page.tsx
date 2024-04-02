@@ -23,7 +23,7 @@ const formSchema = z.object({
 	discount: z.number(),
 	active: z.boolean(),
 	productLimit: z.number().min(1, { message: "this value cannot be zero" }),
-	staffLimit: z.number().min(1, { message: "this value cannot be zero" }),
+	billLimit: z.number().min(1, { message: "this value cannot be zero" }),
 	shopLimit: z.number().min(1, { message: "this value cannot be zero" })
 })
 
@@ -126,13 +126,13 @@ const EditPlan = ({ params }: Props) => {
 							className={inputStyle("productLimit")}
 						/>
 					</InputContainer>
-					<InputContainer name='Staff Limit' error={errors.staffLimit?.message}>
+					<InputContainer name='Bill Limit' error={errors.billLimit?.message}>
 						<input
-							{...register("staffLimit", { valueAsNumber: true })}
+							{...register("billLimit", { valueAsNumber: true })}
 							placeholder='Staff limit'
-							defaultValue={plan?.staffLimit}
+							defaultValue={plan?.billLimit}
 							type="number"
-							className={inputStyle("staffLimit")}
+							className={inputStyle("billLimit")}
 						/>
 					</InputContainer>
 					<InputContainer name='shop Limit' error={errors.shopLimit?.message} >

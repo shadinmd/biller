@@ -7,10 +7,12 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { useStaff } from '@/context/staffContext'
 
 const formSchema = z.object({
-	username: z.string().min(5, { message: "enter a valid username" }),
-	password: z.string().min(1, { message: "this field cannot be empty" })
+	shopId: z.string().min(1, { message: "this field cannot be empty" }).refine(val => !val.includes(" ")),
+	username: z.string().min(5, { message: "enter a valid username" }).refine(val => !val.includes(" ")),
+	password: z.string().min(1, { message: "this field cannot be empty" }).refine(val => !val.includes(" "))
 })
 
 type formType = z.infer<typeof formSchema>
@@ -19,12 +21,14 @@ const Login = () => {
 
 	const { register, handleSubmit, formState: { errors } } = useForm<formType>({ resolver: zodResolver(formSchema) })
 	const router = useRouter()
+	const { fetchStaffDetails } = useStaff()
 
 	const onSubmit = async (data: formType) => {
 		try {
 			const response = await api.post("/auth/staff/login", data)
 			if (response.data.success) {
 				localStorage.setItem("staff-token", response.data.token)
+				fetchStaffDetails()
 				router.push("/staff")
 			} else {
 				toast.error(response.data.message)
@@ -45,6 +49,13 @@ const Login = () => {
 					onSubmit={handleSubmit(onSubmit)}
 					className='flex items-center flex-col gap-2'
 				>
+					<input
+						{...register("shopId")}
+						placeholder='Shop Id'
+						type="text"
+						className={`px-3 py-1 border-2 ${errors.shopId ? "border-red-500 placeholder:text-red-500" : "border-primary"} rounded-lg outline-none`}
+					/>
+					{errors.shopId && <p className='text-red-500'>{errors.shopId.message}</p>}
 					<input
 						{...register("username")}
 						placeholder='Username'

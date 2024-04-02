@@ -1,22 +1,26 @@
 import { FormEvent, ReactNode, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../shadcn/Dialog'
-import api, { handleAxiosError } from '@/lib/api'
+import { handleAxiosError } from '@/lib/api'
 import { toast } from 'sonner'
+import { vendorApi } from '@/lib/vendorApi'
+import ShopInterface from 'types/shop.interface'
 
 interface Props {
-	children: ReactNode
+	children: ReactNode,
+	addShop: (shop: ShopInterface) => void
 }
 
-const NewShop = ({ children }: Props) => {
+const NewShop = ({ children, addShop }: Props) => {
 	const [open, setOpen] = useState(false)
 	const [name, setName] = useState("")
 
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault()
-			const { data } = await api.post("/shop", { name })
+			const { data } = await vendorApi.post("/shop", { name })
 			if (data.success) {
 				toast.success(data.message)
+				addShop(data.shop)
 				setOpen(false)
 			} else {
 				toast.error(data.message)
