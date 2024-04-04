@@ -56,7 +56,7 @@ const Shops = () => {
 		<div className="flex flex-col gap-5 p-5 items-center justify-start bg-white rounded-lg drop-shadow-lg w-full h-full">
 			<div className="flex items-center justify-between w-full">
 				<div className="flex items-center gap-5 h-full">
-					<p className="text-black font-bold pb-5 self-start">Vendors</p>
+					<p className="text-black font-bold pb-5 self-start">Shops</p>
 					<div className="flex items-center gap-2 border-2 bg-white px-3 py-1 rounded-lg outline-none">
 						<Icon icon={"mdi:search"} />
 						<input
