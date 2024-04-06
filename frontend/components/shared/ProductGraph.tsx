@@ -41,11 +41,14 @@ const ProductGraph = ({ id, api }: Props) => {
 	}, [])
 
 	return (
-		<div className="bg-white drop-shadow-lg p-5 rounded-lg w-full h-full">
+		<div className="flex flex-col items-center justify-center bg-white drop-shadow-lg p-5 rounded-lg w-full h-full">
 			<p>bills created last 5 days</p>
-			<div>
+			<div className="flex items-center justify-center w-full h-full">
 				<Bar
 					datasetIdKey='id'
+					options={{
+						maintainAspectRatio: false
+					}}
 					data={{
 						labels: data.map(e => e.date),
 						datasets: [

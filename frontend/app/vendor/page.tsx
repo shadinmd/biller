@@ -112,7 +112,7 @@ const Vendor = () => {
 				<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg w-full">
 					<div>
 						<p className="text-custom-light-gray">Expiry</p>
-						<p className="font-bold">{moment(vendor.planExpiry).format("DD-MM-YYYY")}</p>
+						<p className="font-bold text-sm">{moment(vendor.planExpiry).format("DD/MM/YY")}</p>
 					</div>
 					<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 						<Icon icon={"material-symbols:contract"} className="text-white text-2xl" />
@@ -120,22 +120,27 @@ const Vendor = () => {
 				</div>
 
 			</div>
-			<div className='w-full h-full bg-white drop-shadow-lg rounded-lg p-5'>
+			<div className='flex flex-col items-center justify-center w-full h-full bg-white drop-shadow-lg rounded-lg p-5'>
 				<p>bills created last 5 days</p>
-				<Bar
-					datasetIdKey='id'
-					data={{
-						labels: data.map(e => e._id),
-						datasets: [
-							{
-								label: "bills",
-								data: data.map(e => e.count),
-								backgroundColor: "#3F488D",
-								borderColor: "#3F488D"
-							},
-						],
-					}}
-				/>
+				<div className='flex items-center justify-center h-full w-full'>
+					<Bar
+						datasetIdKey='id'
+						options={{
+							maintainAspectRatio: false
+						}}
+						data={{
+							labels: data.map(e => e._id),
+							datasets: [
+								{
+									label: "bills",
+									data: data.map(e => e.count),
+									backgroundColor: "#3F488D",
+									borderColor: "#3F488D"
+								},
+							],
+						}}
+					/>
+				</div>
 			</div>
 		</div>
 	)
