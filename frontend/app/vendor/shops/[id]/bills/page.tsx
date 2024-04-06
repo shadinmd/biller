@@ -9,20 +9,20 @@ import BillInterface from "types/bill.interface"
 import moment from "moment"
 
 interface Props {
-	id: string,
-	setBillCount: (count: number) => void
+	params: {
+		id: string,
+	}
 }
 
-const Bills = ({ id, setBillCount }: Props) => {
+const Bills = ({ params }: Props) => {
 
 	const [bills, setBills] = useState<BillInterface[]>([])
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		vendorApi.get(`/bill/shop/${id}`)
+		vendorApi.get(`/bill/shop/${params.id}`)
 			.then(({ data }) => {
 				if (data.success) {
-					setBillCount(data.bills.length)
 					setBills(data.bills)
 				} else {
 					toast.error(data.message)
@@ -33,7 +33,7 @@ const Bills = ({ id, setBillCount }: Props) => {
 			}).finally(() => {
 				setLoading(false)
 			})
-	}, [id, setBillCount])
+	}, [params.id])
 
 	if (loading) {
 		return (
@@ -44,8 +44,8 @@ const Bills = ({ id, setBillCount }: Props) => {
 	}
 
 	return (
-		<div className='hidden lg:flex flex-col py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg overflow-hidden'>
-			<div className="flex flex-col overflow-y-scroll">
+		<div className='flex flex-col py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
+			<div className="flex flex-col">
 				<div className='flex justify-between'>
 					<p className='text-xl font-bold'>Bills</p>
 				</div>
@@ -77,4 +77,5 @@ const Bills = ({ id, setBillCount }: Props) => {
 }
 
 export default Bills
+
 

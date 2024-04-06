@@ -5,28 +5,28 @@ import { Separator } from "@/components/shadcn/Seperator"
 import { handleAxiosError } from "@/lib/api"
 import { vendorApi } from "@/lib/vendorApi"
 import { toast } from "sonner"
-import NewStaff from "../NewStaff"
+import NewStaff from "@/components/shared/NewStaff"
 import { Icon } from "@iconify/react"
 import Link from "next/link"
 import { ScaleLoader } from "react-spinners"
 import cn from "@/lib/cn"
 
 interface Props {
-	id: string,
-	setStaffCount: (count: number) => void
+	params: {
+		id: string,
+	}
 }
 
-const Staffs = ({ id, setStaffCount }: Props) => {
+const Staffs = ({ params }: Props) => {
 
 	const [staffs, setStaffs] = useState<StaffInterface[]>([])
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		vendorApi.get(`/staff/shop/${id}`)
+		vendorApi.get(`/staff/shop/${params.id}`)
 			.then(({ data }) => {
 				if (data.success) {
 					setStaffs(data.staffs)
-					setStaffCount(data.staffs.length)
 				} else {
 					toast.error(data.message)
 				}
@@ -36,10 +36,9 @@ const Staffs = ({ id, setStaffCount }: Props) => {
 			}).finally(() => {
 				setLoading(false)
 			})
-	}, [id, setStaffCount])
+	}, [params.id])
 
 	const newStaff = (staff: StaffInterface) => {
-		setStaffCount(staffs.length + 1)
 		setStaffs(val => [...val, staff])
 	}
 
@@ -55,7 +54,7 @@ const Staffs = ({ id, setStaffCount }: Props) => {
 		<div className='flex flex-col py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
 			<div className="flex items-center w-full justify-between">
 				<p className='text-xl font-bold'>Staffs</p>
-				<NewStaff shopId={id} newStaff={newStaff} >
+				<NewStaff shopId={params.id} newStaff={newStaff} api={vendorApi} >
 					<Icon icon="mdi:plus" className="text-green-500 text-4xl" />
 				</NewStaff>
 			</div>
@@ -67,7 +66,7 @@ const Staffs = ({ id, setStaffCount }: Props) => {
 			{staffs.map((e, i) => (
 				<Link
 					className="flex flex-col w-full"
-					href={`/vendor/shops/${id}/s/${e?._id}`}
+					href={`/vendor/shops/${params.id}/staffs/${e?._id}`}
 					key={i}
 				>
 					<div className="flex w-full items-center h-10">
@@ -83,3 +82,4 @@ const Staffs = ({ id, setStaffCount }: Props) => {
 }
 
 export default Staffs
+
