@@ -12,7 +12,7 @@ interface Props {
 	children: ReactNode,
 	api: AxiosInstance,
 	shopId: string,
-	className: string
+	className?: string
 }
 
 const formSchema = z.object({
