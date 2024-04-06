@@ -6,11 +6,13 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { handleAxiosError } from "@/lib/api"
 import { toast } from "sonner"
+import cn from "@/lib/cn"
 
 interface Props {
 	children: ReactNode,
 	api: AxiosInstance,
-	shopId: string
+	shopId: string,
+	className: string
 }
 
 const formSchema = z.object({
@@ -20,7 +22,7 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-const NewCustomer = ({ children, api, shopId }: Props) => {
+const NewCustomer = ({ children, api, shopId, className }: Props) => {
 
 	const [open, setOpen] = useState(false)
 
@@ -43,7 +45,7 @@ const NewCustomer = ({ children, api, shopId }: Props) => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className="outline-none">
+			<DialogTrigger className={cn("outline-none", className)}>
 				{children}
 			</DialogTrigger>
 			<DialogContent className="bg-white">
