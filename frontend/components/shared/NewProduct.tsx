@@ -84,40 +84,57 @@ const NewProduct = ({ children, shopId, newProduct, api }: Props) => {
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex flex-col items-center gap-2"
 					>
-						<input
-							{...register("name")}
-							placeholder="Name"
-							type="text"
-							className={inputStyle}
-						/>
+						<div className="flex gap-3 items-center">
+							<p>Name: </p>
+							<input
+								{...register("name")}
+								placeholder="Name"
+								type="text"
+								className={inputStyle}
+							/>
+						</div>
 						{errors.name && <p className="text-red-500">{errors.name.message}</p>}
-						<input
-							{...register("barcode")}
-							placeholder="Barcode"
-							type="text"
-							className={inputStyle}
-						/>
+
+						<div className="flex gap-3 items-center">
+							<p>Barcode: </p>
+							<input
+								{...register("barcode")}
+								placeholder="Barcode"
+								type="text"
+								className={inputStyle}
+							/>
+						</div>
 						{errors.barcode && <p className="text-red-500">{errors.barcode.message}</p>}
-						<input
-							{...register("price", { valueAsNumber: true })}
-							placeholder="Price"
-							type="text"
-							className={inputStyle}
-						/>
+
+						<div className="flex gap-3 items-center">
+							<p>Price: </p>
+							<input
+								{...register("price", { valueAsNumber: true })}
+								placeholder="Price"
+								type="text"
+								className={inputStyle}
+							/>
+						</div>
 						{errors.price && <p className="text-red-500">{errors.price.message}</p>}
-						<input
-							{...register("profit", { valueAsNumber: true })}
-							placeholder="Profit"
-							type="text"
-							className={inputStyle}
-						/>
+						<div className="flex gap-3 items-center">
+							<p>Profit: </p>
+							<input
+								{...register("profit", { valueAsNumber: true })}
+								placeholder="Profit"
+								type="text"
+								className={inputStyle}
+							/>
+						</div>
 						{errors.profit && <p className="text-red-500">{errors.profit.message}</p>}
-						<input
-							{...register("point", { valueAsNumber: true })}
-							placeholder="Point"
-							type="text"
-							className={inputStyle}
-						/>
+						<div className="flex gap-3 items-center">
+							<p>Point: </p>
+							<input
+								{...register("point", { valueAsNumber: true })}
+								placeholder="Point"
+								type="text"
+								className={inputStyle}
+							/>
+						</div>
 						{errors.point && <p className="text-red-500">{errors.point.message}</p>}
 						<button className="font-bold text-white bg-primary px-6 py-2 rounded-full" type="submit">
 							Create
