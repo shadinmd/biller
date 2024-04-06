@@ -5,13 +5,14 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { vendorApi } from "@/lib/vendorApi"
 import StaffInterface from "types/staff.interface"
+import { AxiosInstance } from "axios"
 
 interface Props {
 	children: ReactNode,
 	shopId: string,
-	newStaff: (staff: StaffInterface) => void
+	newStaff: (staff: StaffInterface) => void,
+	api: AxiosInstance
 }
 
 const formSchema = z.object({
@@ -22,14 +23,14 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-const NewStaff = ({ children, shopId, newStaff }: Props) => {
+const NewStaff = ({ children, shopId, newStaff, api }: Props) => {
 
 	const [open, setOpen] = useState(false)
 	const { register, formState: { errors }, handleSubmit } = useForm<formType>({ resolver: zodResolver(formSchema) })
 
 	const onSubmit = async (data: formType) => {
 		try {
-			const response = await vendorApi.post("/staff", { shopId, ...data })
+			const response = await api.post("/staff", { shopId, ...data })
 			if (response.data.success) {
 				toast.success(response.data.message)
 				newStaff(response.data.staff)
@@ -92,3 +93,4 @@ const NewStaff = ({ children, shopId, newStaff }: Props) => {
 }
 
 export default NewStaff
+

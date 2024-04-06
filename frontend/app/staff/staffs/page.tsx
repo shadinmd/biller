@@ -1,6 +1,6 @@
 "use client"
 import { Separator } from "@/components/shadcn/Seperator"
-import NewStaff from "@/components/staff/NewStaff"
+import NewStaff from "@/components/shared/NewStaff"
 import { useStaff } from "@/context/staffContext"
 import { handleAxiosError } from "@/lib/api"
 import { staffApi } from "@/lib/staffApi"
@@ -68,7 +68,7 @@ const Staff = () => {
 							className="outline-none border-2 px-3 py-1 rounded-lg"
 						/>
 					</div>
-					<NewStaff shopId={staff.shop} newStaff={addStaff} >
+					<NewStaff api={staffApi} shopId={staff.shop} newStaff={addStaff} >
 						<Icon icon={"mdi:plus"} className="text-green-500 text-3xl" />
 					</NewStaff>
 				</div>
