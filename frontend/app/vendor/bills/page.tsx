@@ -7,33 +7,30 @@ import { Separator } from "@/components/shadcn/Seperator"
 import { ScaleLoader } from "react-spinners"
 import BillInterface from "types/bill.interface"
 import moment from "moment"
+import { useVendor } from "@/context/vendorContext"
 
-interface Props {
-	params: {
-		id: string,
-	}
-}
-
-const Bills = ({ params }: Props) => {
+const Bills = () => {
 
 	const [bills, setBills] = useState<BillInterface[]>([])
 	const [loading, setLoading] = useState(true)
+	const { vendor } = useVendor()
 
 	useEffect(() => {
-		vendorApi.get(`/bill/shop/${params.id}`)
-			.then(({ data }) => {
-				if (data.success) {
-					setBills(data.bills)
-				} else {
-					toast.error(data.message)
-				}
-			})
-			.catch(error => {
-				handleAxiosError(error)
-			}).finally(() => {
-				setLoading(false)
-			})
-	}, [params.id])
+		if (vendor.shop)
+			vendorApi.get(`/bill/shop/${vendor.shop}`)
+				.then(({ data }) => {
+					if (data.success) {
+						setBills(data.bills)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				}).finally(() => {
+					setLoading(false)
+				})
+	}, [vendor.shop])
 
 	if (loading) {
 		return (
@@ -64,8 +61,8 @@ const Bills = ({ params }: Props) => {
 							className='flex items-center justify-between w-full h-10'
 						>
 							<p className="w-full">{moment(e.createdAt).format("DD/MM/YY")}</p>
-							<p className="w-full">{e.totalAtfterDiscount}</p>
 							<p className="w-full">{e.products.length}</p>
+							<p className="w-full">{e.totalAtfterDiscount}</p>
 						</div>
 						<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
 					</div>
