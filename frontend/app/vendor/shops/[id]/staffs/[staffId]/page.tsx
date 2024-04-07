@@ -74,7 +74,7 @@ const StaffView = ({ params }: Props) => {
 
 	const changeManagerStatus = async () => {
 		try {
-			const { data } = await vendorApi.put(`/staff/manager/ ${params.staffId}`, { manager: !staff?.manager })
+			const { data } = await vendorApi.put(`/staff/manager/${params.staffId}`, { manager: !staff?.manager })
 			if (data.success) {
 				setStaff(prev => ({ ...prev, manager: !prev.manager }))
 				toast.success(data.message)
@@ -96,7 +96,7 @@ const StaffView = ({ params }: Props) => {
 
 	return (
 		<div className="flex flex-col gap-5 w-full h-full">
-			<div className="flex gap-5 items-center w-full">
+			<div className="flex flex-col lg:flex-row gap-5 items-center w-full">
 				<div className="flex gap-5 h-full w-full p-5 bg-white rounded-lg drop-shadow-lg">
 
 					<div className="flex gap-2 w-full">
