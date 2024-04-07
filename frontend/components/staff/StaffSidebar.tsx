@@ -14,6 +14,7 @@ const StaffSidebar = () => {
 			setLinks([
 				{ title: "Dashboard", to: "/staff", icon: "mdi:home" },
 				{ title: "Staffs", to: "/staff/staffs", icon: "mdi:people-group" },
+				{ title: "Customers", to: "/staff/customers", icon: "mdi:people-group" },
 				{ title: "Products", to: "/staff/products", icon: "bi:boxes" },
 				{ title: "Bills", to: "/staff/bills", icon: "mdi:books" },
 				{ title: "Settings", to: "/staff/settings", icon: "mdi:gear" }
@@ -21,6 +22,7 @@ const StaffSidebar = () => {
 		} else {
 			setLinks([
 				{ title: "Dashboard", to: "/staff", icon: "mdi:home" },
+				{ title: "Customers", to: "/staff/customers", icon: "mdi:people-group" },
 				{ title: "Products", to: "/staff/products", icon: "bi:boxes" },
 				{ title: "Bills", to: "/staff/bills", icon: "mdi:books" },
 				{ title: "Settings", to: "/staff/settings", icon: "mdi:gear" }

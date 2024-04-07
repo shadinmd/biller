@@ -5,6 +5,7 @@ import { redirect, usePathname } from "next/navigation"
 import api from "@/lib/api"
 import StaffSidebar from "@/components/staff/StaffSidebar"
 import { StaffProvider } from "@/context/staffContext"
+import Navbar from "@/components/staff/Navbar"
 
 const Layout = ({ children }: { children: ReactNode }) => {
 
@@ -24,9 +25,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
 	}, [path])
 
 	return (
-		<div className="flex items-center justify-center h-screen w-screen">
+		<div className="flex flex-col lg:flex-row items-center justify-center h-screen w-screen">
 			<StaffProvider>
 				{path != "/staff/login" && <StaffSidebar />}
+				{path != "/staff/login" && <Navbar />}
 				<div className="flex flex-col gap-5 h-full w-full bg-custom-offwhite p-5">
 					{children}
 				</div>
