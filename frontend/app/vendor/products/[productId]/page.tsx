@@ -10,7 +10,6 @@ import { toast } from "sonner"
 import ProductInterface from "types/product.interface"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import { ScaleLoader } from "react-spinners"
-import { Bar } from "react-chartjs-2"
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js"
 import ProductGraph from "@/components/shared/ProductGraph"
 import { vendorApi } from "@/lib/vendorApi"
@@ -26,7 +25,6 @@ ChartJS.register(
 
 interface Props {
 	params: {
-		id: string,
 		productId: string
 	}
 }
@@ -251,7 +249,7 @@ const ProductView = ({ params }: Props) => {
 					}
 
 				</div>
-				<ProductGraph id={params.id} api={vendorApi} />
+				<ProductGraph id={params.productId} api={vendorApi} />
 			</div>
 		</div>
 	)

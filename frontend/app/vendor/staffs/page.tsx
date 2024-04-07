@@ -24,7 +24,6 @@ const Staffs = () => {
 				.then(({ data }) => {
 					if (data.success) {
 						setStaffs(data.staffs)
-						console.log(data.staffs)
 					} else {
 						toast.error(data.message)
 					}

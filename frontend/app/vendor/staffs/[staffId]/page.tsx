@@ -12,7 +12,6 @@ import moment from "moment"
 
 interface Props {
 	params: {
-		id: string,
 		staffId: string
 	}
 }

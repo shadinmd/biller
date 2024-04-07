@@ -1,6 +1,5 @@
 interface Props {
 	params: {
-		id: string,
 		billId: string
 	}
 }
