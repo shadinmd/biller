@@ -15,6 +15,10 @@ const vendorSchema = new mongoose.Schema<vendorInterface>({
 		required: true,
 		unique: true
 	},
+	shop: {
+		type: String,
+		ref: "Shop"
+	},
 	verified: {
 		type: Boolean,
 		default: false

@@ -3,6 +3,7 @@ interface VendorInterface {
 	username: string
 	password: string
 	email: string
+	shop: string
 	verified: boolean
 	verificationToken: string
 	activePlan: string
