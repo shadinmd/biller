@@ -3,6 +3,7 @@ import { handle500ServerError } from "../lib/error.handlers";
 import shopModel from "../models/shop.model";
 import { decodeToken } from "../lib/auth";
 import VendorModel from "../models/vendor.model";
+import BillModel from "../models/bill.model";
 
 export const createShop = async (req: Request, res: Response) => {
 	try {
@@ -102,6 +103,40 @@ export const getShopCount = async (req: Request, res: Response) => {
 			success: true,
 			message: "successfully fetched shop count",
 			shops
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getShopSales = async (req: Request, res: Response) => {
+	try {
+		const { shop } = req.query
+
+		const date = new Date()
+		date.setDate(date.getDay() - 5)
+
+		const bills = await BillModel.aggregate([
+			{ $match: { shop, createdAt: { $gt: date } } },
+			{
+				$group: {
+					_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+					count: { $sum: 1 }
+				}
+			},
+			{
+				$sort: { _id: 1 }
+			}
+		])
+
+		console.log(bills)
+
+		res.status(200).send({
+			success: true,
+			message: "dashboard data fetched successfully",
+			bills
 		})
 
 	} catch (error) {
