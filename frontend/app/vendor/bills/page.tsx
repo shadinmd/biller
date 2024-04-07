@@ -8,6 +8,7 @@ import { ScaleLoader } from "react-spinners"
 import BillInterface from "types/bill.interface"
 import moment from "moment"
 import { useVendor } from "@/context/vendorContext"
+import Link from "next/link"
 
 const Bills = () => {
 
@@ -53,7 +54,8 @@ const Bills = () => {
 				</div>
 				<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
 				{bills.map((e, i) => (
-					<div
+					<Link
+						href={`/vendor/bills/${e._id}`}
 						key={`staff-${i}`}
 						className="flex flex-col items-center w-full"
 					>
@@ -65,7 +67,7 @@ const Bills = () => {
 							<p className="w-full">{e.totalAtfterDiscount}</p>
 						</div>
 						<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-					</div>
+					</Link>
 				))}
 			</div>
 		</div>
