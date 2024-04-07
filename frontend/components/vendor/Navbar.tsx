@@ -3,13 +3,13 @@ import { Sheet, SheetContent, SheetTrigger } from "../shadcn/Sheet"
 import { ReactNode } from "react"
 import Link from "next/link"
 
-const Navbar = () => {
+const Navbar = ({ items }: { items: { title: string, to: string, icon: string }[] }) => {
 	return (
 		<header className="flex lg:hidden w-full bg-custom-offwhite px-5 pt-5">
 			<div className="flex items-center justify-between p-3 w-full h-fit bg-white drop-shadow-lg rounded-lg">
 				<p className="text-xl font-extrabold">Biller</p>
 				<div>
-					<Sidebar>
+					<Sidebar items={items}>
 						<Icon icon={"mdi:menu"} className="text-2xl" />
 					</Sidebar>
 				</div>
@@ -18,7 +18,10 @@ const Navbar = () => {
 	)
 }
 
-const Sidebar = ({ children }: { children: ReactNode }) => {
+const Sidebar = ({ children, items }: {
+	children: ReactNode,
+	items: { title: string, to: string, icon: string }[]
+}) => {
 	return (
 		<Sheet>
 			<SheetTrigger className="outline-none">
@@ -31,28 +34,36 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
 				<Link href={`/`} className="text-3xl text-primary font-bold md:px-4 md:py-3 w-full flex gap-5 md:pr-16 items-center">
 					Biller
 				</Link>
-				<Link href={`/vendor`} className="bg-white rounded-lg drop-shadow-lg p-4 w-full flex gap-5 items-center">
-					<Icon icon={"mdi:home"} className="text-primary text-2xl" />
-					<p className="font-semibold text-custom-light-gray">
-						Dashboard
-					</p>
-				</Link>
-
-				<Link href={`/vendor/shops`} className="bg-white rounded-lg drop-shadow-lg p-4 w-full flex gap-5 items-center">
-					<Icon icon={"mdi:shop"} className="text-primary text-2xl" />
-					<p className="font-semibold text-custom-light-gray">
-						Shops
-					</p>
-				</Link>
-
-				<Link href={`/vendor/settings`} className="bg-white rounded-lg drop-shadow-lg p-4 w-full flex gap-5 items-center">
-					<Icon icon={"mdi:cog"} className="text-primary text-2xl" />
-					<p className="font-semibold text-custom-light-gray">
-						Settings
-					</p>
-				</Link>
+				{items.map((e, i) => (
+					<SidebarItem
+						key={i}
+						title={e.title}
+						to={e.to}
+						icon={e.icon}
+					/>
+				))}
 			</SheetContent>
 		</Sheet >
+	)
+}
+
+interface SidebarProps {
+	title: string,
+	to: string,
+	icon: string
+}
+
+const SidebarItem = ({ title, to, icon }: SidebarProps) => {
+
+	return (
+		<Link href={to} className={`px-2 py-2 md:px-4 md:py-3 w-full flex gap-5 pr-6 md:pr-16 items-center`}>
+			<div className={`p-2 bg-white rounded-lg drop-shadow-lg`}>
+				<Icon icon={icon} className={`text-primary text-2xl`} />
+			</div>
+			<p className={`text-custom-light-gray`}>
+				{title}
+			</p>
+		</Link>
 	)
 }
 
