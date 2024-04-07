@@ -67,6 +67,18 @@ const Shop = () => {
 				.catch(error => {
 					handleAxiosError(error)
 				})
+
+			vendorApi.get(`/shop/data?shop=${shop._id}`)
+				.then(({ data }) => {
+					if (data.success) {
+						setData(data.bills)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch((error) => {
+					handleAxiosError(error)
+				})
 		}
 	}, [shop?._id])
 
@@ -98,7 +110,7 @@ const Shop = () => {
 				<div className='flex gap-5 flex-col w-full h-full'>
 					<div className='flex gap-5 w-full h-full'>
 						<Link
-							href={`/vendor/shops/${shop?._id}/customers`}
+							href={`/vendor/customers`}
 							className="flex items-center justify-between p-4 w-full h-full bg-white rounded-lg drop-shadow-lg"
 						>
 							<div>
@@ -111,7 +123,7 @@ const Shop = () => {
 						</Link>
 
 						<Link
-							href={`/vendor/shops/${shop?._id}/bills`}
+							href={`/vendor/bills`}
 							className='flex items-center justify-between p-4 w-full h-full bg-white rounded-lg drop-shadow-lg'
 						>
 							<div>
@@ -127,7 +139,7 @@ const Shop = () => {
 
 					<div className='flex gap-5 items-center w-full h-full'>
 						<Link
-							href={`/vendor/shops/${shop?._id}/products`}
+							href={`/vendor/products`}
 							className='flex items-center justify-between p-4 w-full h-full bg-white rounded-lg drop-shadow-lg'
 						>
 							<div>
@@ -140,7 +152,7 @@ const Shop = () => {
 						</Link>
 
 						<Link
-							href={`/vendor/shops/${shop?._id}/staffs`}
+							href={`/vendor/staffs`}
 							className='flex items-center justify-between p-4 w-full h-full bg-white rounded-lg drop-shadow-lg'
 						>
 							<div>

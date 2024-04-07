@@ -9,33 +9,30 @@ import ProductInterface from "types/product.interface"
 import { Separator } from "@/components/shadcn/Seperator"
 import Link from "next/link"
 import { ScaleLoader } from "react-spinners"
+import { useVendor } from "@/context/vendorContext"
 
-interface Props {
-	params: {
-		id: string,
-	}
-}
-
-const Products = ({ params }: Props) => {
+const Products = () => {
 
 	const [products, setProducts] = useState<ProductInterface[]>([])
 	const [loading, setLoading] = useState(true)
+	const { vendor } = useVendor()
 
 	useEffect(() => {
-		vendorApi.get(`/product/shop/${params.id}`)
-			.then(({ data }) => {
-				if (data.success) {
-					setProducts(data.products)
-				} else {
-					toast.error(data.message)
-				}
-			})
-			.catch(error => {
-				handleAxiosError(error)
-			}).finally(() => {
-				setLoading(false)
-			})
-	}, [params.id])
+		if (vendor.shop)
+			vendorApi.get(`/product/shop/${vendor.shop}`)
+				.then(({ data }) => {
+					if (data.success) {
+						setProducts(data.products)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				}).finally(() => {
+					setLoading(false)
+				})
+	}, [vendor.shop])
 
 	const newProduct = (product: ProductInterface) => {
 		setProducts(products => [...products, product])
@@ -53,7 +50,7 @@ const Products = ({ params }: Props) => {
 		<div className='flex flex-col py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
 			<div className='flex justify-between'>
 				<p className='text-xl font-bold'>Products</p>
-				<NewProduct shopId={params.id} newProduct={newProduct} api={vendorApi}>
+				<NewProduct shopId={vendor.shop || ""} newProduct={newProduct} api={vendorApi}>
 					<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
 				</NewProduct>
 			</div>
@@ -69,7 +66,7 @@ const Products = ({ params }: Props) => {
 					className="flex flex-col items-center w-full"
 				>
 					<Link
-						href={`/vendor/shops/${params.id}/products/${e?._id}`}
+						href={`/vendor/products/${e?._id}`}
 						className='flex items-center justify-between w-full h-10'
 					>
 						<p className="w-full">{e.name}</p>

@@ -11,8 +11,6 @@ import { useRouter } from "next/navigation"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import NewCustomer from "@/components/staff/NewCustomer"
 import { useVendor } from "@/context/vendorContext"
-import Shop from "../page"
-import { vendored } from "next/dist/server/future/route-modules/app-page/module.compiled"
 
 const Customers = () => {
 
