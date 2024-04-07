@@ -71,6 +71,9 @@ const Shop = () => {
 			vendorApi.get(`/shop/data?shop=${shop._id}`)
 				.then(({ data }) => {
 					if (data.success) {
+						while (data.bills.length < 5) {
+							data.bills.unshift({ _id: "no_data", count: 0 })
+						}
 						setData(data.bills)
 					} else {
 						toast.error(data.message)
