@@ -10,35 +10,35 @@ import CustomerInterface from "types/customer.interface"
 import { useRouter } from "next/navigation"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import NewCustomer from "@/components/staff/NewCustomer"
+import { useVendor } from "@/context/vendorContext"
+import Shop from "../page"
+import { vendored } from "next/dist/server/future/route-modules/app-page/module.compiled"
 
-interface Props {
-	params: {
-		id: string,
-	}
-}
-
-const Customers = ({ params }: Props) => {
+const Customers = () => {
 
 	const [customers, setCustomers] = useState<CustomerInterface[]>([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
 	const router = useRouter()
 
+	const { vendor } = useVendor()
+
 	useEffect(() => {
-		vendorApi.get(`/customer/shop/${params.id}`)
-			.then(({ data }) => {
-				if (data.success) {
-					setCustomers(data.customers)
-				} else {
-					toast.error(data.message)
-				}
-			})
-			.catch(error => {
-				handleAxiosError(error)
-			}).finally(() => {
-				setLoading(false)
-			})
-	}, [params.id])
+		if (vendor.shop)
+			vendorApi.get(`/customer/shop/${vendor.shop}`)
+				.then(({ data }) => {
+					if (data.success) {
+						setCustomers(data.customers)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				}).finally(() => {
+					setLoading(false)
+				})
+	}, [vendor.shop])
 
 	const newCustomer = (customer: CustomerInterface) => {
 		setCustomers(val => [...val, customer])
@@ -67,7 +67,7 @@ const Customers = ({ params }: Props) => {
 					type="text"
 					className=""
 				/>
-				<NewCustomer shopId={params.id} api={vendorApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
+				<NewCustomer shopId={vendor?._id || ""} api={vendorApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
 					<Icon icon={"mdi:plus"} className="text-green-500 text-2xl" />
 				</NewCustomer>
 			</div>
@@ -79,7 +79,7 @@ const Customers = ({ params }: Props) => {
 				{customers.map((e, i) => (
 					<Link
 						className="flex flex-col w-full"
-						href={`/vendor/shops/${params.id}/s/${e?._id}`}
+						href={`/vendor/shops/customers/${e?._id}`}
 						key={i}
 					>
 						<div className="flex w-full items-center h-10">

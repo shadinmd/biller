@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { handle500ServerError } from "../lib/error.handlers";
 import shopModel from "../models/shop.model";
 import { decodeToken } from "../lib/auth";
+import VendorModel from "../models/vendor.model";
 
 export const createShop = async (req: Request, res: Response) => {
 	try {
@@ -23,6 +24,8 @@ export const createShop = async (req: Request, res: Response) => {
 			vendor: payload.id
 		}).save()
 
+		await VendorModel.updateOne({ _id: payload.id }, { $set: { shop: newShop._id } })
+
 		res.status(200).send({
 			success: true,
 			message: "shop created successsfully",
@@ -38,7 +41,6 @@ export const createShop = async (req: Request, res: Response) => {
 export const findShopsByVendor = async (req: Request, res: Response) => {
 	try {
 		const payload = decodeToken(req.headers.authorization!) as { id: string }
-		const { name } = req.query
 		const { id } = payload
 
 		if (!id) {
@@ -49,20 +51,12 @@ export const findShopsByVendor = async (req: Request, res: Response) => {
 			return
 		}
 
-		const query = {
-			name: {
-				$regex: name || "",
-				$options: "i"
-			},
-			vendor: id
-		}
-
-		const shops = await shopModel.find(query)
+		const shop = await shopModel.findOne({ vendor: id })
 
 		res.status(200).send({
 			success: true,
 			messge: "fetched shops of current account",
-			shops
+			shop
 		})
 
 	} catch (error) {
