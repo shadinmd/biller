@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Separator } from "@/components/shadcn/Seperator"
 import { handleAxiosError } from "@/lib/api"
 import { vendorApi } from "@/lib/vendorApi"
 import { toast } from "sonner"
@@ -22,21 +21,26 @@ const Customers = () => {
 	const { vendor } = useVendor()
 
 	useEffect(() => {
-		if (vendor.shop)
-			vendorApi.get(`/customer/shop/${vendor.shop}`)
-				.then(({ data }) => {
-					if (data.success) {
-						setCustomers(data.customers)
-					} else {
-						toast.error(data.message)
-					}
-				})
-				.catch(error => {
-					handleAxiosError(error)
-				}).finally(() => {
-					setLoading(false)
-				})
-	}, [vendor.shop])
+		const timeout = setTimeout(() => {
+			if (vendor.shop)
+				vendorApi.get(`/customer/shop/${vendor.shop}?name=${search}`)
+					.then(({ data }) => {
+						if (data.success) {
+							setCustomers(data.customers)
+						} else {
+							toast.error(data.message)
+						}
+					})
+					.catch(error => {
+						handleAxiosError(error)
+					}).finally(() => {
+						setLoading(false)
+					})
+		}, 500)
+		return () => {
+			clearTimeout(timeout)
+		}
+	}, [vendor.shop, search])
 
 	const newCustomer = (customer: CustomerInterface) => {
 		setCustomers(val => [...val, customer])
@@ -55,35 +59,30 @@ const Customers = () => {
 	}
 
 	return (
-		<div className='flex flex-col gap-5 w-full h-full'>
+		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
 			<div className="flex items-center w-full justify-between">
-				<p className='text-xl font-bold'>Customers</p>
-				<input
-					value={search}
-					onChange={e => setSearch(e.target.value)}
-					placeholder="Name..."
-					type="text"
-					className=""
-				/>
+				<div className="flex items-center gap-2 h-full">
+					<p className='flex items-center px-2 justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg h-full'>Customers</p>
+					<input
+						value={search}
+						onChange={e => setSearch(e.target.value)}
+						placeholder="Name..."
+						type="text"
+						className="rounded-lg px-3 py-2 drop-shadow-lg outline-none font-semibold"
+					/>
+				</div>
 				<NewCustomer shopId={vendor?._id || ""} api={vendorApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
 					<Icon icon={"mdi:plus"} className="text-green-500 text-2xl" />
 				</NewCustomer>
 			</div>
-			<div className="flex flex-col py-3 px-5 w-full h-full rounded-lg bg-white drop-shadow-lg">
-				<div className='flex text-custom-light-gray items-center justify-between w-full'>
-					<p className="w-full">username</p>
-				</div>
-				<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
+			<div className="flex flex-col gap-1 w-full h-full">
 				{customers.map((e, i) => (
 					<Link
-						className="flex flex-col w-full"
 						href={`/vendor/shops/customers/${e?._id}`}
 						key={i}
+						className="flex flex-col w-full bg-white drop-shadow-lg rounded-lg p-2 font-semibold"
 					>
-						<div className="flex w-full items-center h-10">
-							<p className="w-full">{e?.name}</p>
-						</div>
-						<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
+						<p className="w-full">{e?.name}</p>
 					</Link>
 				))}
 			</div>
