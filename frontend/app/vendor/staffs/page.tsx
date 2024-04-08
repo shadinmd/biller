@@ -16,23 +16,30 @@ const Staffs = () => {
 
 	const [staffs, setStaffs] = useState<StaffInterface[]>([])
 	const [loading, setLoading] = useState(true)
+	const [search, setSearch] = useState("")
 	const { vendor } = useVendor()
 
 	useEffect(() => {
-		if (vendor.shop)
-			vendorApi.get(`/staff/shop/${vendor.shop}`)
-				.then(({ data }) => {
-					if (data.success) {
-						setStaffs(data.staffs)
-					} else {
-						toast.error(data.message)
-					}
-				})
-				.catch(error => {
-					handleAxiosError(error)
-				}).finally(() => {
-					setLoading(false)
-				})
+		const timeout = setTimeout(() => {
+			if (vendor.shop)
+				vendorApi.get(`/staff/shop/${vendor.shop}?name=${search}`)
+					.then(({ data }) => {
+						if (data.success) {
+							setStaffs(data.staffs)
+						} else {
+							toast.error(data.message)
+						}
+					})
+					.catch(error => {
+						handleAxiosError(error)
+					}).finally(() => {
+						setLoading(false)
+					})
+		}, 500)
+
+		return () => {
+			clearTimeout(timeout)
+		}
 	}, [vendor.shop])
 
 	const newStaff = (staff: StaffInterface) => {
@@ -48,31 +55,34 @@ const Staffs = () => {
 	}
 
 	return (
-		<div className='flex flex-col py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
+		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
 			<div className="flex items-center w-full justify-between">
-				<p className='text-xl font-bold'>Staffs</p>
-				<NewStaff shopId={vendor.shop || ""} newStaff={newStaff} api={vendorApi} >
-					<Icon icon="mdi:plus" className="text-green-500 text-4xl" />
+				<div className="flex gap-1 items-center h-full">
+					<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg px-2 h-full'>Staffs</p>
+					<input
+						value={search}
+						onChange={e => setSearch(e.target.value)}
+						placeholder="Search.."
+						type="text"
+						className="drop-shadow-lg outline-none rounded-lg py-2 px-3"
+					/>
+				</div>
+				<NewStaff className="bg-white rounded-lg drop-shadow-lg" shopId={vendor.shop || ""} newStaff={newStaff} api={vendorApi} >
+					<Icon icon="mdi:plus" className="text-green-500 text-3xl" />
 				</NewStaff>
 			</div>
-			<div className='flex text-custom-light-gray items-center justify-between w-full'>
-				<p className="w-full">username</p>
-				<p className="w-full">type</p>
-			</div>
-			<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-			{staffs.map((e, i) => (
-				<Link
-					className="flex flex-col w-full"
-					href={`/vendor/staffs/${e?._id}`}
-					key={i}
-				>
-					<div className="flex w-full items-center h-10">
+			<div className="flex flex-col gap-1 w-full h-full">
+				{staffs.map((e, i) => (
+					<Link
+						href={`/vendor/staffs/${e?._id}`}
+						key={i}
+						className="flex items-center bg-white rounded-lg drop-shadow-lg w-full p-2 font-semibold"
+					>
 						<p className="w-full">{e?.username}</p>
 						<p className={cn("w-full", e.manager ? "text-red-500" : "text-green-500")}>{e?.manager ? "manager" : "staff"}</p>
-					</div>
-					<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
-				</Link>
-			))}
+					</Link>
+				))}
+			</div>
 		</div>
 
 	)
