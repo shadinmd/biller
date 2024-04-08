@@ -113,28 +113,32 @@ const ProductView = ({ params }: Props) => {
 
 			<div className="flex items-center gap-5 w-full h-56 ">
 
-				<div className="flex items-center bg-white drop-shadow-lg rounded-lg w-full h-full">
-					<div className="flex flex-col w-full h-full p-5">
-						<p className="font-bold text-xl">{product?.name}</p>
-					</div>
-					<div className="flex flex-col gap-2 items-end w-full h-full p-5">
-						<div className={`${product?.listed ? "bg-green-500" : "bg-red-500"} text-sm text-white rounded-lg px-4 py-1`}>
+				<div className="flex items-center bg-white p-3 drop-shadow-lg rounded-lg w-full h-full">
+					<div className="flex flex-col gap-1 items-start h-full w-full">
+						<div className={`flex items-center justify-center size-20 rounded-lg ${product.image && "border"} border-primary p-1`}>
 							{
-								product.listed ?
-									"Listed" :
-									"Un-Listed"
+								product.image ?
+									<img src={product.image} className="w-full h-full" alt="" /> :
+									<Icon icon={"mdi:image"} className="text-9xl" />
 							}
 						</div>
-						<p
-							className="flex gap-1 items-center cursor-pointer text-sm text-custom-light-gray"
-							onClick={async () => {
-								navigator.clipboard.writeText(product?.barcode || "");
-								toast.success("barcode copied")
-							}}
-						>
-							<span>code: </span>
-							{product?.barcode}
+						<p className="font-semibold">{product.name}</p>
+						<p className="text-gray-500 cursor-pointer"
+							onClick={(e) => {
+								e.preventDefault()
+								navigator.clipboard.writeText(product.barcode)
+								toast.success("copied barcode")
+							}}>
+							{`barcode: ${product.barcode}`}
 						</p>
+					</div>
+					<div className="flex items-start h-full">
+						<div className={product.listed ? "bg-green-500 text-white font-bold p-1 px-2 rounded-lg" : "bg-red-500 text-white font-bold p-1 px-2 rounded-lg"}>
+							{
+								product.listed ?
+									"Listed" : "Hidden"
+							}
+						</div>
 					</div>
 				</div>
 
