@@ -18,7 +18,16 @@ interface Props {
 const formSchema = z.object({
 	username: z.string().min(5, { message: "username is too short" }).refine(val => !val.includes(" "), { message: "username must not contain space" }),
 	password: z.string().min(5, { message: "password is too short" }).refine(val => !val.includes(" "), { message: "password must not contain space" }),
+	confirmPassword: z.string(),
 	manager: z.boolean().default(false)
+}).superRefine(({ password, confirmPassword }, ctx) => {
+	if (password != confirmPassword) {
+		ctx.addIssue({
+			code: "custom",
+			path: ["confirmPassword"],
+			message: "passwords don't match"
+		})
+	}
 })
 
 type formType = z.infer<typeof formSchema>
@@ -73,6 +82,13 @@ const NewStaff = ({ children, shopId, newStaff, api }: Props) => {
 						className="border-2 border-primary px-3 py-1 rounded-lg outline-none"
 					/>
 					{errors.password && <p className="text-red-500">{errors.password.message}</p>}
+					<input
+						{...register("confirmPassword")}
+						placeholder="Confirm password"
+						type="password"
+						className="border-2 border-primary px-3 py-1 rounded-lg outline-none"
+					/>
+					{errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
 					<div className="flex items-center gap-2">
 						<label>Manager: </label>
 						<input
