@@ -2,17 +2,20 @@ import { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import ProductModel from "../models/product.model"
 import BillModel from "../models/bill.model"
+import cloudinary from "../lib/cloudinary"
+import { Readable } from "stream"
 
 export const createProduct = async (req: Request, res: Response) => {
 	try {
 		const { name, shopId, price, barcode, profit, point } = req.body
 
-		if (!name ||
+		if (
+			!name ||
 			!shopId ||
-			typeof price != "number" ||
+			!price ||
 			!barcode ||
-			typeof profit != "number" ||
-			typeof point != "number"
+			!profit ||
+			!point
 		) {
 			res.status(400).send({
 				success: false,
@@ -21,21 +24,70 @@ export const createProduct = async (req: Request, res: Response) => {
 			return
 		}
 
-		const newProduct = await new ProductModel({
-			name,
-			shop: shopId,
-			price,
-			profit,
-			barcode,
-			point
-		}).save()
+		const productSearch = await ProductModel.findOne({ shop: shopId, name })
 
-		res.status(200).send({
-			success: true,
-			message: "product created successfully",
-			product: newProduct
-		})
+		if (productSearch) {
+			return res.status(400).send({
+				success: false,
+				message: "prodcut with this name allready exists"
+			})
+		}
 
+		let image
+
+		if (req.file) {
+
+			const uploadStream = cloudinary.uploader.upload_stream({
+				resource_type: "auto",
+			},
+				async (error, result) => {
+					if (error) {
+						throw new Error("file upload failed")
+					} else {
+						image = result?.url
+						console.log(result?.url)
+
+						const newProduct = await new ProductModel({
+							name,
+							shop: shopId,
+							price,
+							profit,
+							barcode,
+							point,
+							image
+						}).save()
+
+						res.status(200).send({
+							success: true,
+							message: "product created successfully",
+							product: newProduct
+						})
+					}
+				}
+			)
+
+			const stream = new Readable()
+			stream.push(req.file.buffer)
+			stream.push(null)
+			stream.pipe(uploadStream)
+
+		} else {
+			const newProduct = await new ProductModel({
+				name,
+				shop: shopId,
+				price,
+				profit,
+				barcode,
+				point,
+				image
+			}).save()
+
+			res.status(200).send({
+				success: true,
+				message: "product created successfully",
+				product: newProduct
+			})
+		}
 	} catch (error) {
 		console.log(error)
 		handle500ServerError(res)
@@ -134,29 +186,65 @@ export const editProductDetails = async (req: Request, res: Response) => {
 		const { id } = req.params
 		const { name, price, stock, profit, point } = req.body
 
+
 		if (
 			!name ||
-			typeof price != "number" ||
-			typeof stock != "number" ||
-			typeof profit != "number" ||
-			typeof point != "number"
+			!price ||
+			!stock ||
+			!profit ||
+			!point
 		) {
 			res.status(400).send({
 				success: false,
-				message: ""
+				message: "please fill all fields"
 			})
 			return
 		}
 
-		await ProductModel.updateOne({ _id: id }, {
-			$set: {
-				name,
-				price,
-				stock,
-				profit,
-				point
-			}
-		})
+
+		let image
+
+		if (req.file) {
+			const uploadStream = cloudinary.uploader.upload_stream({
+				resource_type: "auto",
+			},
+				async (error, result) => {
+					if (error) {
+						throw new Error("file upload failed")
+					} else {
+						image = result?.url
+						console.log(result?.url)
+
+						await ProductModel.updateOne({ _id: id }, {
+							$set: {
+								name,
+								price,
+								stock,
+								profit,
+								point,
+								image
+							}
+						})
+					}
+				}
+			)
+
+			const stream = new Readable()
+			stream.push(req.file.buffer)
+			stream.push(null)
+			stream.pipe(uploadStream)
+
+		} else {
+			await ProductModel.updateOne({ _id: id }, {
+				$set: {
+					name,
+					price,
+					stock,
+					profit,
+					point
+				}
+			})
+		}
 
 		res.status(200).send({
 			success: true,

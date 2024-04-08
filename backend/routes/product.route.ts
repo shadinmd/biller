@@ -10,11 +10,12 @@ import {
 	getAllListedProductsbyShop,
 	getProductAnalytics
 } from "../controllers/product.controller";
+import { upload } from "../lib/multer";
 
 const productRouter = Router()
 
-productRouter.route("")
-	.post(authorizationMiddleware("staff", "vendor", "manager"), createProduct)
+productRouter.route("/")
+	.post(authorizationMiddleware("staff", "vendor", "manager"), upload.single("file"), createProduct)
 
 productRouter.route("/shop/:id")
 	.get(authorizationMiddleware("staff", "vendor", "manager"), getAllProductsbyShop)
@@ -33,6 +34,6 @@ productRouter
 productRouter.route("/:id")
 	.get(authorizationMiddleware("staff", "vendor", "manager"), getProductDetails)
 	.delete(authorizationMiddleware("staff", "vendor", "manager"), deleteProductById)
-	.put(authorizationMiddleware("staff", "vendor", "manager"), editProductDetails)
+	.put(authorizationMiddleware("staff", "vendor", "manager"), upload.single("file"), editProductDetails)
 
 export default productRouter
