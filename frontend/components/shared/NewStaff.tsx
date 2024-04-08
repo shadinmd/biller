@@ -7,12 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import StaffInterface from "types/staff.interface"
 import { AxiosInstance } from "axios"
+import cn from "@/lib/cn"
 
 interface Props {
 	children: ReactNode,
 	shopId: string,
 	newStaff: (staff: StaffInterface) => void,
-	api: AxiosInstance
+	api: AxiosInstance,
+	className?: string
 }
 
 const formSchema = z.object({
@@ -32,7 +34,7 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-const NewStaff = ({ children, shopId, newStaff, api }: Props) => {
+const NewStaff = ({ children, shopId, newStaff, api, className }: Props) => {
 
 	const [open, setOpen] = useState(false)
 	const { register, formState: { errors }, handleSubmit } = useForm<formType>({ resolver: zodResolver(formSchema) })
@@ -52,7 +54,7 @@ const NewStaff = ({ children, shopId, newStaff, api }: Props) => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className="outline-none">
+			<DialogTrigger className={cn("outline-none", className)}>
 				{children}
 			</DialogTrigger>
 			<DialogContent className="bg-white">
