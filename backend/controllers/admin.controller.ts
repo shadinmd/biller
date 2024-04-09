@@ -3,9 +3,18 @@ import { handle500ServerError } from "../lib/error.handlers";
 import VendorModel from "../models/vendor.model";
 import PlanModel from "../models/plan.model";
 
-export const getVendors = async (_req: Request, res: Response) => {
+export const getVendors = async (req: Request, res: Response) => {
 	try {
-		const vendors = await VendorModel.find()
+		const { name } = req.query
+
+		const query = {
+			username: {
+				$regex: name || "",
+				$options: "i"
+			}
+		}
+
+		const vendors = await VendorModel.find(query)
 
 		res.status(200).send({
 			success: true,
@@ -147,7 +156,6 @@ export const createPlan = async (req: Request, res: Response) => {
 			features,
 			productLimit,
 			billLimit,
-			shopLimit
 		} = req.body
 
 		if (
@@ -155,7 +163,6 @@ export const createPlan = async (req: Request, res: Response) => {
 			!description ||
 			typeof price != "number" ||
 			typeof productLimit != "number" ||
-			typeof shopLimit != "number" ||
 			typeof billLimit != "number"
 		) {
 			res.status(400).send({
@@ -183,7 +190,6 @@ export const createPlan = async (req: Request, res: Response) => {
 			features,
 			productLimit,
 			billLimit,
-			shopLimit
 		}).save()
 
 		res.status(200).send({
