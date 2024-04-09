@@ -122,3 +122,48 @@ export const confirmPayment = async (req: Request, res: Response) => {
 		handle500ServerError(res)
 	}
 }
+
+export const getAnalytics = async (req: Request, res: Response) => {
+	try {
+
+		const date = new Date()
+		date.setDate(date.getDate() - 5)
+		const data = await SubscriptionModel.aggregate([
+			{ $match: { createdAt: { $gt: date } } },
+			{
+				$group: {
+					_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+					count: { $sum: 1 }
+				}
+			},
+			{ $sort: { _id: 1 } }
+		])
+
+		res.status(200).send({
+			success: true,
+			message: "fetched subscription analytics",
+			data
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getSubsCount = async (_req: Request, res: Response) => {
+	try {
+
+		const subs = await SubscriptionModel.countDocuments({})
+
+		res.status(200).send({
+			success: true,
+			message: "successfully fetched subs count",
+			subs
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
