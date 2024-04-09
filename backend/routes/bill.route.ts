@@ -6,7 +6,10 @@ import {
 	getBillsByShop,
 	getBillsByStaff,
 	getNumofBillsbyshop,
-	getBillCountByVendor
+	getBillCountByVendor,
+	getBillAnalytics,
+	getBillCountByShop,
+	editBill
 } from "../controllers/bill.controller";
 import authorizationMiddleware from "../middlewares/authorization.middleware";
 
@@ -21,6 +24,11 @@ billRouter.get("/staff/no/:id", authorizationMiddleware("manager", "vendor", "st
 billRouter.route("/shop/:id")
 	.get(authorizationMiddleware("staff", "vendor", "manager"), getBillsByShop)
 
+billRouter.route("/shop/:id/count")
+	.get(authorizationMiddleware("staff", "vendor", "manager"), getBillCountByShop)
+
+
+billRouter.get("/analytics", authorizationMiddleware("admin"), getBillAnalytics)
 
 billRouter.route("/vendor/count")
 	.get(authorizationMiddleware("vendor"), getBillCountByVendor)
@@ -30,6 +38,7 @@ billRouter.route("/staff/:id")
 
 billRouter.route("/:id")
 	.get(authorizationMiddleware("manager", "vendor", "staff"), getBillDetails)
+	.put(authorizationMiddleware("vendor", "manager"), editBill)
 	.delete(authorizationMiddleware("manager", "vendor", "staff"), deleteBillById)
 
 export default billRouter

@@ -243,3 +243,92 @@ export const getBillCountByVendor = async (req: Request, res: Response) => {
 		handle500ServerError(res)
 	}
 }
+
+export const getBillAnalytics = async (req: Request, res: Response) => {
+	try {
+		const date = new Date()
+		date.setDate(date.getDate() - 5)
+
+		const bills = await BillModel.aggregate([
+			{ $match: { createdAt: { $gt: date } } },
+			{
+				$group: {
+					_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+					count: { $sum: 1 }
+				}
+			},
+			{
+				$sort: { _id: 1 }
+			}
+		])
+
+		res.status(200).send({
+			success: true,
+			messgage: "bill anaytics fetched successfully",
+			bills
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getBillCountByShop = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+
+		const bills = await BillModel.countDocuments({ shop: id })
+
+		res.status(200).send({
+			success: true,
+			message: "bill count fetched  successfully",
+			bills
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const editBill = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+		const { products } = req.body
+
+		const response = await BillModel.updateOne(
+			{ _id: id },
+			{
+				$set: {
+					products
+				}
+			}
+		)
+
+		if (response.matchedCount < 1) {
+			res.status(400).send({
+				success: false,
+				message: "bill was not found"
+			})
+			return
+		}
+
+		if (response.modifiedCount < 1) {
+			res.status(400).send({
+				success: false,
+				message: "failed to update bill"
+			})
+			return
+		}
+
+		res.status(200).send({
+			success: true,
+			message: "bill edited suscessfully"
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
