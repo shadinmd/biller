@@ -40,7 +40,7 @@ const Staffs = () => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [vendor.shop])
+	}, [vendor.shop, search])
 
 	const newStaff = (staff: StaffInterface) => {
 		setStaffs(val => [...val, staff])

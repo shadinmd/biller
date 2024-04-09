@@ -42,31 +42,19 @@ const Bills = () => {
 	}
 
 	return (
-		<div className='flex flex-col py-3 px-5 w-full h-full bg-white rounded-lg drop-shadow-lg'>
-			<div className="flex flex-col">
-				<div className='flex justify-between'>
-					<p className='text-xl font-bold'>Bills</p>
-				</div>
-				<div className='flex text-custom-light-gray justify-between w-full'>
-					<p className="w-full">date</p>
-					<p className="w-full">items</p>
-					<p className="w-full">total</p>
-				</div>
-				<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
+		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
+			<div className='flex justify-between'>
+				<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg p-2'>Bills</p>
+			</div>
+			<div className="flex flex-col gap-1 w-full">
 				{bills.map((e, i) => (
 					<Link
 						href={`/vendor/bills/${e._id}`}
 						key={`staff-${i}`}
-						className="flex flex-col items-center w-full"
+						className="flex items-center w-full p-2 font-semibold bg-white rounded-lg drop-shadow-lg"
 					>
-						<div
-							className='flex items-center justify-between w-full h-10'
-						>
-							<p className="w-full">{moment(e.createdAt).format("DD/MM/YY")}</p>
-							<p className="w-full">{e.products.length}</p>
-							<p className="w-full">{e.totalAtfterDiscount}</p>
-						</div>
-						<Separator orientation="horizontal" className="w-full bg-custom-light-gray opacity-60" />
+						<p className="w-full">{moment(e.createdAt).format("DD/MM/YY")}</p>
+						<p className="w-full">{e.totalAtfterDiscount}₹</p>
 					</Link>
 				))}
 			</div>

@@ -99,23 +99,14 @@ const StaffView = ({ params }: Props) => {
 				<div className="flex gap-5 h-full w-full p-5 bg-white rounded-lg drop-shadow-lg">
 
 					<div className="flex gap-2 w-full">
-						<div className="bg-black h-20 w-20 rounded-lg">
-
-						</div>
 						<div className="h-full">
 							<p className="text-xl font-bold">{staff?.username}</p>
 						</div>
 					</div>
 
 					<div className="flex flex-col items-end gap-3 w-full">
-						<div className="flex gap-2">
-							<p className="">type:</p>
-							<p className="bg-green-500 rounded-lg text-white font-bold px-3 py-1">{staff?.manager ? "manager" : "staff"}</p>
-						</div>
-						<div className="flex gap-2">
-							<p className="">status:</p>
-							<p className={`${staff?.blocked ? "bg-red-500" : "bg-green-500"} rounded-lg text-white font-bold px-3 py-1`}>{staff?.blocked ? "inactive" : "active"}</p>
-						</div>
+						<p className="bg-green-500 rounded-lg text-white font-bold px-3 py-1">{staff?.manager ? "manager" : "staff"}</p>
+						<p className={`${staff?.blocked ? "bg-red-500" : "bg-green-500"} rounded-lg text-white font-bold px-3 py-1`}>{staff?.blocked ? "inactive" : "active"}</p>
 					</div>
 
 				</div>
@@ -164,7 +155,7 @@ const StaffView = ({ params }: Props) => {
 
 				</div>
 			</div>
-			<div className="flex gap-5 items-center w-full">
+			<div className="flex gap-5 flex-wrap items-center w-full">
 				<div className="flex font-bold items-center gap-3 p-3 bg-white rounded-lg drop-shadow-lg">
 					<p>Reset passsword</p>
 					<ResetPassword api={vendorApi} staffId={params.staffId}>
@@ -200,7 +191,7 @@ const StaffView = ({ params }: Props) => {
 					</button>
 				</div>
 			</div>
-		</div>
+		</div >
 	)
 }
 

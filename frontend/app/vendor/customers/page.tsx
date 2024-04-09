@@ -78,7 +78,7 @@ const Customers = () => {
 			<div className="flex flex-col gap-1 w-full h-full">
 				{customers.map((e, i) => (
 					<Link
-						href={`/vendor/shops/customers/${e?._id}`}
+						href={`/vendor/customers/${e?._id}`}
 						key={i}
 						className="flex flex-col w-full bg-white drop-shadow-lg rounded-lg p-2 font-semibold"
 					>

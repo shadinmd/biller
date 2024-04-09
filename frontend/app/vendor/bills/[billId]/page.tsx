@@ -1,7 +1,7 @@
 "use client"
 import { Separator } from '@/components/shadcn/Seperator'
 import { handleAxiosError } from '@/lib/api'
-import { staffApi } from '@/lib/staffApi'
+import { vendorApi } from '@/lib/vendorApi'
 import moment from 'moment'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -25,7 +25,7 @@ const BillView = ({ params }: Props) => {
 	const router = useRouter()
 
 	useEffect(() => {
-		staffApi.get(`/bill/${params.billId}`)
+		vendorApi.get(`/bill/${params.billId}`)
 			.then(({ data }) => {
 				if (data.success) {
 					setBill(data.bill)
@@ -41,7 +41,7 @@ const BillView = ({ params }: Props) => {
 	const deleteBill = useCallback(async () => {
 		if (bill?._id) {
 			try {
-				const { data } = await staffApi.delete(`/bill/${bill?._id}`)
+				const { data } = await vendorApi.delete(`/bill/${bill?._id}`)
 				if (data.success) {
 					router.back()
 					toast.success(data.message)
