@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import e, { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import ProductModel from "../models/product.model"
 import BillModel from "../models/bill.model"
@@ -353,6 +353,24 @@ export const getProductAnalytics = async (req: Request, res: Response) => {
 			success: true,
 			message: "fetched prodcut analytics successfully",
 			data
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getProductCount = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+
+		const products = await ProductModel.countDocuments({ shop: id })
+
+		res.status(200).send({
+			success: true,
+			message: "successfully fetchd product count",
+			products
 		})
 
 	} catch (error) {

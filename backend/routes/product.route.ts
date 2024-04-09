@@ -8,7 +8,8 @@ import {
 	editProductDetails,
 	editProdutctListing,
 	getAllListedProductsbyShop,
-	getProductAnalytics
+	getProductAnalytics,
+	getProductCount
 } from "../controllers/product.controller";
 import { upload } from "../lib/multer";
 
@@ -17,6 +18,8 @@ const productRouter = Router()
 productRouter.route("/")
 	.post(authorizationMiddleware("staff", "vendor", "manager"), upload.single("file"), createProduct)
 
+productRouter.route("/shop/:id/count")
+	.get(authorizationMiddleware("staff", "vendor", "manager"), getProductCount)
 productRouter.route("/shop/:id")
 	.get(authorizationMiddleware("staff", "vendor", "manager"), getAllProductsbyShop)
 
