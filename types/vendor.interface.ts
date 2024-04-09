@@ -6,6 +6,7 @@ interface VendorInterface {
 	shop: string
 	verified: boolean
 	verificationToken: string
+	verificationExpiry: Date
 	activePlan: string
 	planExpiry: Date
 	active: boolean
