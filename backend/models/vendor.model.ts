@@ -27,6 +27,10 @@ const vendorSchema = new mongoose.Schema<vendorInterface>({
 		type: String,
 		required: true
 	},
+	verificationExpiry: {
+		type: Date,
+		required: true
+	},
 	activePlan: {
 		type: String,
 		default: ""
