@@ -100,3 +100,19 @@ export const getDataforDash = async (req: Request, res: Response) => {
 		handle500ServerError(res)
 	}
 }
+
+export const getVendorCount = async (req: Request, res: Response) => {
+	try {
+		const vendors = await VendorModel.countDocuments({})
+
+		res.status(200).send({
+			success: true,
+			message: "vendor count fetched",
+			vendors
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
