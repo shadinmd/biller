@@ -216,4 +216,21 @@ export const changeManagerStatus = async (req: Request, res: Response) => {
 	} catch (error) {
 		handle500ServerError(res)
 	}
-} 
+}
+
+export const getStaffCount = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+		const staffs = await StaffModel.countDocuments({ shop: id })
+
+		res.status(200).send({
+			success: true,
+			message: "successfully fetched staff count",
+			staffs
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}

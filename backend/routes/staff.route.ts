@@ -6,7 +6,8 @@ import {
 	getCurrentStaffDetails,
 	blockStaff,
 	resetStaffPassword,
-	changeManagerStatus
+	changeManagerStatus,
+	getStaffCount
 } from "../controllers/staff.controller";
 import authorizationMiddleware from "../middlewares/authorization.middleware";
 
@@ -18,6 +19,9 @@ staffRouter.route("/")
 
 staffRouter.route("/shop/:id")
 	.get(authorizationMiddleware("vendor", "staff", "manager"), getAllStaffsByshop)
+
+staffRouter.route("/shop/:id/count")
+	.get(authorizationMiddleware("vendor", "staff", "manager"), getStaffCount)
 
 staffRouter.route("/manager/:id")
 	.put(authorizationMiddleware("vendor", "manager"), changeManagerStatus)
