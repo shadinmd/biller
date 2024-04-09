@@ -35,10 +35,6 @@ const planSchema = new mongoose.Schema<PlanInterface>({
 		type: Number,
 		required: true
 	},
-	shopLimit: {
-		type: Number,
-		required: true
-	}
 }, { timestamps: true })
 
 const PlanModel = mongoose.model("Plan", planSchema)
