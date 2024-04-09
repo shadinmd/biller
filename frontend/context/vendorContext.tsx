@@ -19,6 +19,7 @@ const vendorContext = createContext<Props>({
 		shop: "",
 		verified: true,
 		verificationToken: "",
+		verificationExpiry: new Date(),
 		activePlan: "",
 		planExpiry: new Date(),
 		active: false,
@@ -31,6 +32,7 @@ const vendorContext = createContext<Props>({
 export const VendorProvider = ({ children }: { children: ReactNode }) => {
 
 	const router = useRouter()
+
 	const [vendor, setVendor] = useState<VendorInterface>({
 		_id: "",
 		username: "",
@@ -39,6 +41,7 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 		shop: "",
 		verified: true,
 		verificationToken: "",
+		verificationExpiry: new Date(),
 		activePlan: "",
 		planExpiry: new Date(),
 		active: false,
