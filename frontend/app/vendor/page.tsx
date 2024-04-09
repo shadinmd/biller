@@ -17,6 +17,7 @@ import {
 	Legend,
 } from 'chart.js'
 import { useRouter } from 'next/navigation'
+import moment from 'moment'
 
 ChartJS.register(
 	CategoryScale,
@@ -68,6 +69,42 @@ const Shop = () => {
 					handleAxiosError(error)
 				})
 
+			vendorApi.get(`/product/shop/${shop._id}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setProductCount(data.products)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
+			vendorApi.get(`/staff/shop/${shop._id}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setStaffCount(data.staffs)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
+			vendorApi.get(`/bill/shop/${shop._id}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setBillCount(data.bills)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
 			vendorApi.get(`/shop/data?shop=${shop._id}`)
 				.then(({ data }) => {
 					if (data.success) {
@@ -96,12 +133,16 @@ const Shop = () => {
 
 				<div className='flex w-full h-full bg-white rounded-lg drop-shadow-lg p-3'>
 
-					<div className='flex flex-col w-full h-full'>
+					<div className='flex flex-col w-full h-full font-semibold'>
 						<p className='text-xl font-bold'>{shop?.name}</p>
 						<div className='flex text-sm text-custom-light-gray items-center gap-2'>
 							<p>id:</p>
 							<p>{shop?._id}</p>
 							<Icon icon={'solar:copy-bold'} onClick={copyId} className='cursor-pointer' />
+						</div>
+						<div className='flex gap-1'>
+							<p>started on: </p>
+							<p>{moment(shop?.createdAt).format("DD/MM/YYYY")}</p>
 						</div>
 					</div>
 
