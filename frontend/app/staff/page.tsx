@@ -45,7 +45,7 @@ const Staff = () => {
 	})
 	type pointFormType = z.infer<typeof pointFormSchema>
 
-	const { register, formState: { errors }, handleSubmit, watch } = useForm<pointFormType>({ resolver: zodResolver(pointFormSchema) })
+	const { register, formState: { errors }, handleSubmit } = useForm<pointFormType>({ resolver: zodResolver(pointFormSchema) })
 
 	const adddProduct = (product: ProductInterface) => {
 		const index = selectedProducts.findIndex((e) => e._id == product._id)
@@ -89,12 +89,26 @@ const Staff = () => {
 		}
 	}
 
-	const printBill = () => {
-
+	const addQuantity = (id: string) => {
+		let temp = [...selectedProducts]
+		let product = temp.find(e => e._id == id)
+		if (!product) {
+			toast.error("failed to change product quantity")
+			return
+		}
+		product.quantity += 1
+		setSelecetdProducts(temp)
 	}
 
-	const changeQuantity = () => {
-
+	const reduceQuantity = (id: string) => {
+		let temp = [...selectedProducts]
+		let product = temp.find(e => e._id == id)
+		if (!product) {
+			toast.error("failed to change product quantity")
+			return
+		}
+		product.quantity -= 1
+		setSelecetdProducts(temp)
 	}
 
 	const removeItem = (id: string) => {
@@ -131,7 +145,11 @@ const Staff = () => {
 									<p className="w-full">{i + 1}</p>
 									<p className="w-full">{e.name}</p>
 									<p className="w-full">{e.price}</p>
-									<p className="w-full">{e.quantity}</p>
+									<div className="flex gap-1 items-center w-full">
+										<Icon onClick={ev => { ev.preventDefault(); reduceQuantity(e._id) }} icon={"mdi:minus"} className="text-red-500 text-xl" />
+										<p>{e.quantity}</p>
+										<Icon onClick={ev => { ev.preventDefault(); addQuantity(e._id) }} icon={"mdi:plus"} className="text-green-500 text-xl" />
+									</div>
 									<p className="w-full">{e.quantity * e.price}</p>
 									<div className="w-full">
 										<button onClick={ev => { ev.preventDefault(); removeItem(e._id) }}>
@@ -201,9 +219,6 @@ const Staff = () => {
 					</div>
 					<button onClick={handleSubmit(e => setDiscount(e.point || 0))} className="bg-primary text-white font-bold rounded-lg px-6 py-2">
 						Apply
-					</button>
-					<button className="bg-primary text-white font-bold rounded-lg px-6 py-2">
-						Save & Print
 					</button>
 					<button onClick={e => { e.preventDefault(); saveBill() }} className="bg-primary text-white font-bold rounded-lg px-6 py-2">
 						Save
