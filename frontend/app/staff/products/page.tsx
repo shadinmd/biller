@@ -1,28 +1,26 @@
 "use client"
-
-import { Separator } from "@/components/shadcn/Seperator"
 import NewProduct from "@/components/shared/NewProduct"
-import { useStaff } from "@/context/staffContext"
-import { handleAxiosError } from "@/lib/api"
-import { staffApi } from "@/lib/staffApi"
-import { Icon } from "@iconify/react/dist/iconify.js"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { ScaleLoader } from "react-spinners"
+import { Icon } from "@iconify/react"
 import { toast } from "sonner"
+import { handleAxiosError } from "@/lib/api"
+import { vendorApi } from "@/lib/vendorApi"
+import { useEffect, useState } from "react"
 import ProductInterface from "types/product.interface"
+import Link from "next/link"
+import { ScaleLoader } from "react-spinners"
+import { useStaff } from "@/context/staffContext"
 
 const Products = () => {
 
-	const { staff } = useStaff()
 	const [products, setProducts] = useState<ProductInterface[]>([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
+	const { staff } = useStaff()
 
 	useEffect(() => {
-		const fetchProducts = setTimeout(() => {
+		const timeout = setTimeout(() => {
 			if (staff.shop)
-				staffApi.get(`/product/shop/${staff.shop}?name=${search}`)
+				vendorApi.get(`/product/shop/${staff.shop}?name=${search}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setProducts(data.products)
@@ -38,12 +36,12 @@ const Products = () => {
 		}, 500)
 
 		return () => {
-			clearTimeout(fetchProducts)
+			clearTimeout(timeout)
 		}
 	}, [staff.shop, search])
 
-	const addProduct = (product: ProductInterface) => {
-		setProducts(prev => [...prev, product])
+	const newProduct = (product: ProductInterface) => {
+		setProducts(products => [...products, product])
 	}
 
 	if (loading) {
@@ -55,54 +53,49 @@ const Products = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-5 items-start p-5 justify-center bg-white rounded-lg drop-shadow-lg w-full h-full">
-			<div className="flex items-center justify-between w-full">
-				<div className="flex items-cenetr gap-5">
-					<p className="text-3xl font-bold">Products</p>
+		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
+			<div className='flex justify-between'>
+				<div className="flex items-center gap-1">
+					<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg p-2'>Products</p>
 					<input
 						value={search}
 						onChange={e => setSearch(e.target.value)}
-						placeholder="Name.."
+						placeholder="Search.."
 						type="text"
-						className="outline-none px-3 py-1 rounded-lg border-2"
+						className="rounded-lg py-2 px-3 drop-shadow-lg outline-none font-semibold"
 					/>
 				</div>
-				{
-					staff.manager && <NewProduct newProduct={addProduct} shopId={staff.shop} api={staffApi}>
-						<Icon icon={"mdi:plus"} className="text-green-500 text-3xl" />
-					</NewProduct>
-				}
+				<NewProduct className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop || ""} newProduct={newProduct} api={vendorApi}>
+					<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
+				</NewProduct>
 			</div>
-			<div className="flex flex-col items-center w-full h-full">
-				<div className="w-full">
-					<div className="flex text-custom-light-gray items-center w-full">
-						<p className="w-full">name</p>
-						<p className="w-full">price</p>
-						<p className="w-full">stock</p>
-						<p className="w-full">listed</p>
-					</div>
-					<Separator orientation="horizontal" className="w-full bg-custom-light-gray" />
-				</div>
-				{
-					products.map((e, i) => (
-						<Link
-							key={i}
-							href={`/staff/products/${e._id}`}
-							className="w-full"
-						>
-							<div className="flex items-center h-10 w-full">
-								<p className="w-full">{e.name}</p>
-								<p className="w-full">{e.price}</p>
-								<p className="w-full">{e.stock}</p>
-								<p className="w-full">{e.listed ? "listed" : "hidden"}</p>
+			<div className="flex flex-col gap-1">
+				{products.map((e, i) => (
+					<Link
+						href={`/staff/products/${e?._id}`}
+						key={i}
+						className="flex items-center w-full rounded-lg bg-white drop-shadow-lg p-2 font-semibold"
+					>
+						<div className="pr-2">
+							<div className={`flex items-center justify-center size-10 rounded-lg`}>
+								{
+									e.image ?
+										<img src={e.image} className="h-full w-full" alt="" /> :
+										<Icon icon={"mdi:image"} className="text-gray-500 text-4xl" />
+								}
 							</div>
-							<Separator orientation="horizontal" className="w-full bg-custom-light-gray" />
-						</Link>
-					))
-				}
+						</div>
+						<p className="w-full">{e.name}</p>
+						<p className="w-full">pirce: {e.price}</p>
+						<p className="w-full">stock: {e.stock}</p>
+					</Link>
+				))}
 			</div>
-		</div>
+		</div >
+
 	)
 }
 
 export default Products
+
+
