@@ -132,13 +132,17 @@ export const vendorRegister = async (req: Request, res: Response) => {
 		const verificationToken = crypto.hash("sha1", username)
 		console.log(verificationToken)
 
+		const date = new Date()
+		date.setTime(date.getTime() + (5 * 60 * 1000))
+
 		const hashedPassword = hashPass(password)
 
 		await new VendorModel({
 			username,
 			password: hashedPassword,
 			email,
-			verificationToken
+			verificationToken,
+			verificationExpiry: date
 		}).save()
 
 		const FRONT_URL = process.env.FRONT_URL
@@ -217,15 +221,27 @@ export const vendorVerify = async (req: Request, res: Response) => {
 			return
 		}
 
-		const response = await VendorModel.updateOne({ verificationToken: token }, { $set: { verified: true } })
+		const vendor = await VendorModel.findOne({ verificationToken: token })
 
-		if (response.matchedCount < 0) {
+		if (!vendor) {
 			res.status(400).send({
 				success: false,
 				message: "user not found"
 			})
 			return
 		}
+
+		const currentTime = new Date()
+
+		if (currentTime > vendor.planExpiry) {
+			res.status(400).send({
+				successs: false,
+				message: "token expired"
+			})
+			return
+		}
+
+		const response = await VendorModel.updateOne({ verificationToken: token }, { $set: { verified: true } })
 
 		if (response.modifiedCount < 0) {
 			res.status(500).send({
@@ -259,6 +275,12 @@ export const vendorSendOtp = async (req: Request, res: Response) => {
 			})
 			return
 		}
+
+		const date = new Date()
+		date.setTime(date.getTime() + (5 * 60 * 1000))
+
+		vendorSearch.verificationExpiry = date
+		await vendorSearch.save()
 
 		const FRONT_URL = process.env.FRONT_URL
 		sendOtpMail(email, `${FRONT_URL}/verify?token=${vendorSearch.verificationToken}`)
