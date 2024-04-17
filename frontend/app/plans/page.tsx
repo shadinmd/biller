@@ -53,7 +53,6 @@ const Plans = () => {
 							{e.description}
 						</p>
 						<ul className="flex list-disc pl-5 font-bold flex-col h-full">
-							<li>Max shops: {e.shopLimit}</li>
 							<li>Max bills: {e.billLimit}</li>
 							<li>Max producs: {e.productLimit}</li>
 							<li>24/7 customer support</li>
