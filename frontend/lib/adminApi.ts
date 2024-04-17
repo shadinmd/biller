@@ -1,8 +1,9 @@
 import axios, { isAxiosError } from "axios"
 import { toast } from "sonner"
 
+const BACKENDURL = process.env.NEXT_PUBLIC_BACKENDURL
 export const adminApi = axios.create({
-	baseURL: "http://localhost:8000/api",
+	baseURL: BACKENDURL,
 })
 
 adminApi.interceptors.request.use(request => {

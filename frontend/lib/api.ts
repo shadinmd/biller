@@ -2,7 +2,8 @@
 import axios, { isAxiosError } from "axios";
 import { toast } from "sonner";
 
-const api = axios.create({ baseURL: "http://localhost:8000/api" })
+const BACKENDURL = process.env.NEXT_PUBLIC_BACKENDURL
+const api = axios.create({ baseURL: BACKENDURL })
 
 export const handleAxiosError = (error: any) => {
 	if (isAxiosError(error)) {

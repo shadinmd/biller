@@ -1,7 +1,8 @@
 import axios, { isAxiosError } from "axios"
 
+const BACKENDURL = process.env.NEXT_PUBLIC_BACKENDURL
 export const vendorApi = axios.create({
-	baseURL: "http://localhost:8000/api"
+	baseURL: BACKENDURL
 })
 
 vendorApi.interceptors.request.use(request => {
