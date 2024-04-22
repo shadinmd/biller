@@ -1,5 +1,7 @@
 "use client"
+import ExpiredComponent from "@/components/vendor/ExpiredComponent";
 import { vendorApi } from "@/lib/vendorApi";
+import { usePathname } from "next/navigation";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import VendorInterface from "types/vendor.interface";
@@ -21,7 +23,7 @@ const vendorContext = createContext<Props>({
 		verificationExpiry: new Date(),
 		activePlan: "",
 		planExpiry: new Date(),
-		subscribed: false,
+		subscribed: true,
 		active: false,
 		blocked: false,
 		deleted: false,
@@ -31,6 +33,8 @@ const vendorContext = createContext<Props>({
 
 export const VendorProvider = ({ children }: { children: ReactNode }) => {
 
+	const pathname = usePathname()
+	const [expiredModal, setExpiredModal] = useState(false)
 	const [vendor, setVendor] = useState<VendorInterface>({
 		_id: "",
 		username: "",
@@ -43,7 +47,7 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 		activePlan: "",
 		planExpiry: new Date(),
 		active: false,
-		subscribed: false,
+		subscribed: true,
 		blocked: false,
 		deleted: false,
 	})
@@ -65,8 +69,17 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}, [])
 
+	useEffect(() => {
+		if (pathname != "/vendor/subscribe" && !vendor.subscribed) {
+			setExpiredModal(true)
+		} else {
+			setExpiredModal(false)
+		}
+	}, [vendor, pathname])
+
 	return (
 		<vendorContext.Provider value={{ vendor, fetchVendorDetails }}>
+			<ExpiredComponent open={expiredModal} />
 			{children}
 		</vendorContext.Provider>
 	)

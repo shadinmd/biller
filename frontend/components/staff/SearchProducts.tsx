@@ -4,6 +4,7 @@ import ProductInterface from "types/product.interface"
 import api, { handleAxiosError } from "@/lib/api"
 import { useStaff } from "@/context/staffContext"
 import { toast } from "sonner"
+import { staffApi } from "@/lib/staffApi"
 
 interface Props {
 	addProduct: (product: ProductInterface) => void
@@ -17,8 +18,8 @@ const SearchProducts = ({ addProduct }: Props) => {
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
-		if (staff.shop)
-			api.get(`/product/shop/listed/${staff.shop}?name=${search}`)
+		if (staff.shop && localStorage.getItem("staff-token"))
+			staffApi.get(`/product/shop/listed/${staff.shop._id}?name=${search}`)
 				.then(({ data }) => {
 					if (data.success) {
 						setProducts(data.products)
@@ -39,7 +40,7 @@ const SearchProducts = ({ addProduct }: Props) => {
 					return
 				}
 				try {
-					const { data } = await api.get(`/product/shop/listed/${staff.shop}?barcode=${barcode}`)
+					const { data } = await staffApi.get(`/product/shop/listed/${staff.shop}?barcode=${barcode}`)
 					if (data.success) {
 						if (data.product)
 							addProduct(data.product)

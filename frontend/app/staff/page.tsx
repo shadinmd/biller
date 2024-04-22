@@ -162,7 +162,7 @@ const Staff = () => {
 						))}
 					</div>
 				</div>
-				<SearchCustomers shopId={staff.shop} setCustomer={setCustomer} customer={customer} />
+				<SearchCustomers shopId={staff.shop._id} setCustomer={setCustomer} customer={customer} />
 			</div>
 			<div className="flex flex-col gap-5 w-full">
 				<div className="flex gap-5 items-center w-full">
