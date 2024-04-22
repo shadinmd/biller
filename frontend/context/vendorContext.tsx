@@ -21,6 +21,7 @@ const vendorContext = createContext<Props>({
 		verificationExpiry: new Date(),
 		activePlan: "",
 		planExpiry: new Date(),
+		subscribed: false,
 		active: false,
 		blocked: false,
 		deleted: false,
@@ -42,6 +43,7 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 		activePlan: "",
 		planExpiry: new Date(),
 		active: false,
+		subscribed: false,
 		blocked: false,
 		deleted: false,
 	})

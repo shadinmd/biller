@@ -36,11 +36,16 @@ const vendorSchema = new mongoose.Schema<vendorInterface>({
 		default: ""
 	},
 	planExpiry: {
-		type: Date
+		type: Date,
+		default: new Date()
 	},
 	active: {
 		type: Boolean,
 		default: true
+	},
+	subscribed: {
+		type: Boolean,
+		default: false
 	},
 	blocked: {
 		type: Boolean,

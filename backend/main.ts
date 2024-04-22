@@ -13,12 +13,13 @@ import productRouter from "./routes/product.route"
 import billRouter from "./routes/bill.route"
 import subscriptionRoute from "./routes/subscription.route"
 import customerRoute from "./routes/customer.route"
+import startCron from "./lib/cron"
 
 dotenv.config()
-
 const app = express()
 
 connectDb()
+startCron()
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
