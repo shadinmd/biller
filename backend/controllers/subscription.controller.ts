@@ -49,6 +49,7 @@ export const getCheckoutSession = async (req: Request, res: Response) => {
 			message: "subscription created successfully",
 			session
 		})
+		console.log(session)
 
 	} catch (error) {
 		console.log(error)
@@ -59,7 +60,7 @@ export const getCheckoutSession = async (req: Request, res: Response) => {
 export const confirmPayment = async (req: Request, res: Response) => {
 	try {
 		const { sessionId, planId, vendorId } = req.query
-		console.log(sessionId)
+		console.log(sessionId, planId, vendorId)
 
 		const FRONT_URL = process.env.FRONT_URL
 
@@ -96,10 +97,18 @@ export const confirmPayment = async (req: Request, res: Response) => {
 		const startDate = new Date(Date.now())
 		const expiryDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate())
 
-		const response = await VendorModel.updateOne({
-			planExpiry: expiryDate,
-			activePlan: planId
-		})
+		const response = await VendorModel.updateOne(
+			{
+				_id: vendorId
+			},
+			{
+				$set: {
+					planExpiry: expiryDate,
+					activePlan: planId,
+					subscribed: true
+				}
+			}
+		)
 
 		if (response.modifiedCount < 0) {
 			res.redirect(`${FRONT_URL}/payment-failed?message=failed%20to%20update%20user%20subscription%20`)

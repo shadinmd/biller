@@ -28,7 +28,7 @@ const Plans = () => {
 
 	const getStarted = (id: string) => {
 		if (localStorage.getItem("vendor-token"))
-			router.push(`/vendor/subscribe/${id}`)
+			router.push(`/subscribe/${id}`)
 		else
 			router.push("/login")
 	}

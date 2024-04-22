@@ -12,7 +12,8 @@ const staffSchema = new mongoose.Schema<staffInterface>({
 	},
 	shop: {
 		type: String,
-		required: true
+		required: true,
+		ref: "Shop"
 	},
 	manager: {
 		type: Boolean,

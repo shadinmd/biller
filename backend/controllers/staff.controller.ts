@@ -103,7 +103,12 @@ export const getCurrentStaffDetails = async (req: Request, res: Response) => {
 		const token = req.headers.authorization
 		const payload = decodeToken(token!) as { id: string }
 
-		const staff = await StaffModel.findById(payload.id).select("-password")
+		const staff = await StaffModel.findById(payload.id).populate({
+			path: 'shop',
+			populate: {
+				path: 'vendor',
+			},
+		})
 
 		res.status(200).send({
 			success: true,

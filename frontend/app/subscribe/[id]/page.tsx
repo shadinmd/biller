@@ -1,4 +1,6 @@
 "use client"
+import Footer from '@/components/Footer'
+import Navbar from '@/components/Navbar'
 import { handleAxiosError } from '@/lib/api'
 import { vendorApi } from '@/lib/vendorApi'
 import moment from 'moment'
@@ -78,24 +80,28 @@ const Subscribe = ({ params }: Props) => {
 	}
 
 	return (
-		<div className='flex items-center gap-5 h-full w-full p-5'>
-			<div className='flex flex-col gap-2 items-center h-full w-full font-semibold'>
-				<p className='text-3xl font-bold bg-white rounded-lg w-full drop-shadow-lg p-2'>Subscribe</p>
-				<div className='flex items-center gap-2 bg-white rounded-lg drop-shadow-lg p-2 w-full'>
-					<p>Purchase date: </p>
-					<p>{moment(today).local().format("hh:mm A on DD/MM/YYYY")}</p>
+		<div className='flex flex-col items-center gap-5 h-screen w-full'>
+			<Navbar />
+			<div className='flex gap-5 items-center justify-center h-full'>
+				<div className='flex flex-col gap-2 items-center h-full w-full font-semibold'>
+					<p className='text-3xl font-bold bg-white rounded-lg w-full drop-shadow-lg p-2'>Subscribe</p>
+					<div className='flex items-center gap-2 bg-white rounded-lg drop-shadow-lg p-2 w-full'>
+						<p>Purchase date: </p>
+						<p>{moment(today).local().format("hh:mm A on DD/MM/YYYY")}</p>
+					</div>
+					<div className='flex items-center gap-2 bg-white rounded-lg drop-shadow-lg p-2 w-full'>
+						<p>Expiration date: </p>
+						<p>{moment(expiryDate).local().format("hh:mm A on DD/MM/YYYY")}</p>
+					</div>
 				</div>
-				<div className='flex items-center gap-2 bg-white rounded-lg drop-shadow-lg p-2 w-full'>
-					<p>Expiration date: </p>
-					<p>{moment(expiryDate).local().format("hh:mm A on DD/MM/YYYY")}</p>
+				<div className='flex flex-col gap-2 w-full h-full'>
+					<PlanCard plan={plan} />
+					<button onClick={e => { e.preventDefault(); subscribe() }} className='bg-primary rounded-lg px-6 py-3 font-bold text-white'>
+						Subscribe
+					</button>
 				</div>
 			</div>
-			<div className='flex flex-col gap-2 w-full h-full'>
-				<PlanCard plan={plan} />
-				<button onClick={e => { e.preventDefault(); subscribe() }} className='bg-primary rounded-lg px-6 py-3 font-bold text-white'>
-					Subscribe
-				</button>
-			</div>
+			<Footer />
 		</div>
 	)
 }
