@@ -10,6 +10,7 @@ interface VendorInterface {
 	activePlan: string
 	planExpiry: Date
 	active: boolean
+	subscribed: boolean
 	blocked: boolean
 	deleted: boolean
 }

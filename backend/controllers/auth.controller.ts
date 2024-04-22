@@ -278,12 +278,14 @@ export const vendorSendOtp = async (req: Request, res: Response) => {
 
 		const date = new Date()
 		date.setTime(date.getTime() + (5 * 60 * 1000))
+		const token = generateToken(vendorSearch._id)
 
 		vendorSearch.verificationExpiry = date
+		vendorSearch.verificationToken = token
 		await vendorSearch.save()
 
 		const FRONT_URL = process.env.FRONT_URL
-		sendOtpMail(email, `${FRONT_URL}/verify?token=${vendorSearch.verificationToken}`)
+		sendOtpMail(email, `${FRONT_URL}/verify?token=${token}`)
 
 		res.status(200).send({
 			success: true,
