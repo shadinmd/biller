@@ -6,6 +6,7 @@ import { comparePass, createToken, decodeToken, hashPass } from "../lib/auth"
 import StaffModel from "../models/staff.model"
 import crypto from "node:crypto"
 import { sendOtpMail } from "../lib/mailer"
+import generateToken from "../lib/generator"
 
 export const adminLogin = async (req: Request, res: Response) => {
 	try {
@@ -129,7 +130,7 @@ export const vendorRegister = async (req: Request, res: Response) => {
 		}
 
 		//@ts-ignore
-		const verificationToken = crypto.hash("sha1", username)
+		const verificationToken = generateToken(email)
 		console.log(verificationToken)
 
 		const date = new Date()
