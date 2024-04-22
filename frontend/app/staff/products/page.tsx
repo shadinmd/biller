@@ -65,7 +65,7 @@ const Products = () => {
 						className="rounded-lg py-2 px-3 drop-shadow-lg outline-none font-semibold"
 					/>
 				</div>
-				<NewProduct className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop || ""} newProduct={newProduct} api={vendorApi}>
+				<NewProduct className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop._id || ""} newProduct={newProduct} api={vendorApi}>
 					<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
 				</NewProduct>
 			</div>

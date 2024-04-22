@@ -119,7 +119,7 @@ export const StaffProvider = ({ children }: { children: ReactNode }) => {
 	}, [])
 
 	useEffect(() => {
-		setExpiredModal(staff.shop.vendor.subscribed)
+		setExpiredModal(!staff.shop.vendor.subscribed)
 	}, [staff.shop.vendor.subscribed])
 
 	return (

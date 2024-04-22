@@ -66,7 +66,7 @@ const Staffs = () => {
 						className="drop-shadow-lg outline-none rounded-lg py-2 px-3"
 					/>
 				</div>
-				<NewStaff className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop || ""} newStaff={newStaff} api={vendorApi} >
+				<NewStaff className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop._id || ""} newStaff={newStaff} api={vendorApi} >
 					<Icon icon="mdi:plus" className="text-green-500 text-3xl" />
 				</NewStaff>
 			</div>
