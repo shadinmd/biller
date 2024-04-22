@@ -38,6 +38,10 @@ const SearchCustomers = ({ shopId, setCustomer, customer }: Props) => {
 		}
 	}, [shopId, search])
 
+	const newCustomer = (customer: CustomerInterface) => {
+		setCustomers(val => [...val, customer])
+	}
+
 	const onSelect = (id: string) => {
 		const customer = customers.find(e => e._id == id)
 		setCustomer(customer)
@@ -78,7 +82,7 @@ const SearchCustomers = ({ shopId, setCustomer, customer }: Props) => {
 			<div className="flex flex-col gap-2 items-start">
 				<div className="flex items-center justify-between w-full">
 					<p className="font-bold text-xl">customers</p>
-					<NewCustomer api={staffApi} shopId={shopId}>
+					<NewCustomer setCustomers={newCustomer} api={staffApi} shopId={shopId}>
 						<Icon icon={"mdi:plus"} className="text-green-500 text-3xl" />
 					</NewCustomer>
 				</div>
