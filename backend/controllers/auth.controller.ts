@@ -2,10 +2,9 @@ import { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import AdminModel from "../models/admin.model"
 import VendorModel from "../models/vendor.model"
-import { comparePass, createToken, decodeToken, hashPass } from "../lib/auth"
+import { comparePass, createToken, hashPass } from "../lib/auth"
 import StaffModel from "../models/staff.model"
-import crypto from "node:crypto"
-import { sendOtpMail } from "../lib/mailer"
+import { sendOtpMail, sendResetMail } from "../lib/mailer"
 import generateToken from "../lib/generator"
 
 export const adminLogin = async (req: Request, res: Response) => {
@@ -234,7 +233,7 @@ export const vendorVerify = async (req: Request, res: Response) => {
 
 		const currentTime = new Date()
 
-		if (currentTime > vendor.planExpiry) {
+		if (currentTime > vendor.verificationExpiry) {
 			res.status(400).send({
 				successs: false,
 				message: "token expired"
@@ -299,10 +298,74 @@ export const vendorSendOtp = async (req: Request, res: Response) => {
 
 export const vendorForgot = async (req: Request, res: Response) => {
 	try {
-		const token = req.headers.authorization
-		const { id } = decodeToken(token!) as { id: string }
-		const { } = req.body
+		const { email } = req.body
 
+		const vendor = await VendorModel.findOne({ email })
+
+		if (!vendor) {
+			console.log("account not found")
+			res.status(400).send({
+				success: false,
+				message: "no account found with this email"
+			})
+			return
+		}
+
+		const authToken = generateToken(email)
+		const date = new Date()
+		date.setTime(date.getTime() + (5 * 60 * 1000))
+
+		vendor.verificationToken = authToken
+		vendor.verificationExpiry = date
+		await vendor.save()
+
+		const FRONT_URL = process.env.FRONT_URL
+		sendResetMail(email, `${FRONT_URL}/reset?token=${authToken}`)
+
+		res.status(200).send({
+			success: true,
+			message: "Email sent with link for resetting password"
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const vendorResetPass = async (req: Request, res: Response) => {
+	try {
+		const { token, password } = req.body
+
+		console.log(password)
+		const vendor = await VendorModel.findOne({ verificationToken: token })
+
+		if (!vendor) {
+			res.status(400).send({
+				success: false,
+				message: "invalid or expiredtoken"
+			})
+			return
+		}
+
+		const currentTime = new Date()
+
+		if (currentTime > vendor.verificationExpiry) {
+			res.status(400).send({
+				successs: false,
+				message: "link expired"
+			})
+			return
+		}
+
+		const hashedPassword = hashPass(password)
+		vendor.password = hashedPassword
+		await vendor.save()
+
+		res.status(200).send({
+			success: true,
+			message: "password changed successfully"
+		})
 
 	} catch (error) {
 		console.log(error)

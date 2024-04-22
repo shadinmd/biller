@@ -6,7 +6,8 @@ import {
 	vendorRegister,
 	vendorVerify,
 	vendorForgot,
-	vendorSendOtp
+	vendorSendOtp,
+	vendorResetPass
 } from "../controllers/auth.controller"
 const authRouter = express.Router()
 
@@ -15,6 +16,7 @@ authRouter.post("/vendor/verify", vendorVerify)
 authRouter.post("/vendor/sendOtp", vendorSendOtp)
 authRouter.post("/vendor/forgot", vendorForgot)
 authRouter.post("/vendor/register", vendorRegister)
+authRouter.post("/vendor/reset", vendorResetPass)
 
 authRouter.post("/staff/login", staffLogin)
 
