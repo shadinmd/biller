@@ -59,6 +59,7 @@ const Login = () => {
 							type="password"
 							className={`px-3 py-1 border-2 ${errors.password ? "border-red-500 placeholder:text-red-500" : "border-primary"} rounded-lg outline-none`}
 						/>
+						<Link href={"/forgot"} className='text-custom-light-gray' >forgot password <span className='text-black'>click here</span></Link>
 						{errors.password && <p className='text-red-500'>{errors.password.message}</p>}
 						<button className='text-white bg-primary rounded-lg font-bold px-6 py-2'>
 							Login

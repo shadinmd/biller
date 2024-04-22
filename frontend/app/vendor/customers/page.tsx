@@ -6,7 +6,6 @@ import { toast } from "sonner"
 import Link from "next/link"
 import { ScaleLoader } from "react-spinners"
 import CustomerInterface from "types/customer.interface"
-import { useRouter } from "next/navigation"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import NewCustomer from "@/components/staff/NewCustomer"
 import { useVendor } from "@/context/vendorContext"
@@ -16,7 +15,6 @@ const Customers = () => {
 	const [customers, setCustomers] = useState<CustomerInterface[]>([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
-	const router = useRouter()
 
 	const { vendor } = useVendor()
 
@@ -43,11 +41,7 @@ const Customers = () => {
 	}, [vendor.shop, search])
 
 	const newCustomer = (customer: CustomerInterface) => {
-		setCustomers(val => [...val, customer])
-	}
-
-	const goBack = () => {
-		router.back()
+		setCustomers(prev => [...prev, customer])
 	}
 
 	if (loading) {
@@ -71,7 +65,7 @@ const Customers = () => {
 						className="rounded-lg px-3 py-2 drop-shadow-lg outline-none font-semibold"
 					/>
 				</div>
-				<NewCustomer shopId={vendor?._id || ""} api={vendorApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
+				<NewCustomer shopId={vendor.shop} setCustomers={newCustomer} api={vendorApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
 					<Icon icon={"mdi:plus"} className="text-green-500 text-2xl" />
 				</NewCustomer>
 			</div>

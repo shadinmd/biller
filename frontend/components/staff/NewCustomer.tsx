@@ -7,12 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { handleAxiosError } from "@/lib/api"
 import { toast } from "sonner"
 import cn from "@/lib/cn"
+import CustomerInterface from "types/customer.interface"
 
 interface Props {
 	children: ReactNode,
 	api: AxiosInstance,
 	shopId: string,
 	className?: string
+	setCustomers: (customer: CustomerInterface) => void
 }
 
 const formSchema = z.object({
@@ -22,7 +24,7 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-const NewCustomer = ({ children, api, shopId, className }: Props) => {
+const NewCustomer = ({ children, api, shopId, className, setCustomers }: Props) => {
 
 	const [open, setOpen] = useState(false)
 
@@ -34,6 +36,7 @@ const NewCustomer = ({ children, api, shopId, className }: Props) => {
 			const { data } = await api.post("/customer", { ...body, shop: shopId })
 			if (data.success) {
 				toast.success(data.message)
+				setCustomers(data.customer)
 				setOpen(false)
 			} else {
 				toast.error(data.message)

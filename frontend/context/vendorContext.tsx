@@ -1,6 +1,5 @@
 "use client"
 import { vendorApi } from "@/lib/vendorApi";
-import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import VendorInterface from "types/vendor.interface";
@@ -30,8 +29,6 @@ const vendorContext = createContext<Props>({
 })
 
 export const VendorProvider = ({ children }: { children: ReactNode }) => {
-
-	const router = useRouter()
 
 	const [vendor, setVendor] = useState<VendorInterface>({
 		_id: "",

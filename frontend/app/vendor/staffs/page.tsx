@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
 import StaffInterface from "types/staff.interface"
-import { Separator } from "@/components/shadcn/Seperator"
 import { handleAxiosError } from "@/lib/api"
 import { vendorApi } from "@/lib/vendorApi"
 import { toast } from "sonner"
@@ -40,7 +39,7 @@ const Staffs = () => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [vendor.shop, search])
+	}, [vendor, search])
 
 	const newStaff = (staff: StaffInterface) => {
 		setStaffs(val => [...val, staff])
