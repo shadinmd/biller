@@ -63,7 +63,7 @@ export const createCustomer = async (req: Request, res: Response) => {
 		if (searchCustomer) {
 			res.status(400).send({
 				success: false,
-				message: "customer name allready in use"
+				message: "customer name or phone allready in use"
 			})
 			return
 		}
