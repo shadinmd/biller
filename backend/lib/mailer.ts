@@ -28,12 +28,19 @@ export const sendOtpMail = (to: string, url: string) => {
 	})
 }
 
-export const sendResetMail = (to: string) => {
+export const sendResetMail = (to: string, url: string) => {
 
 	transporter.sendMail({
 		from: process.env.EMAIL,
 		to,
-		subject: "Biller: email for resetting your password",
-		text: ``
+		subject: "Biller: reset password request",
+		text: ` with biller
+
+				please click the link below to reset the password of your account
+				${url}
+
+				regards,
+				biller team
+`
 	})
 }
