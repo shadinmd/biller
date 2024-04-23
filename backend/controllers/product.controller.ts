@@ -124,7 +124,7 @@ export const getAllProductsbyShop = async (req: Request, res: Response) => {
 	try {
 
 		const { id } = req.params
-		const { name } = req.query
+		const { name, sort, filter } = req.query
 
 		if (!id) {
 			res.status(400).send({
@@ -134,7 +134,7 @@ export const getAllProductsbyShop = async (req: Request, res: Response) => {
 			return
 		}
 
-		const query = {
+		let query: any = {
 			name: {
 				$regex: name || "",
 				$options: "i"
@@ -142,7 +142,23 @@ export const getAllProductsbyShop = async (req: Request, res: Response) => {
 			shop: id
 		}
 
+		if (filter == "listed") {
+			query = { ...query, listed: true }
+		}
+
+		if (filter == "unlisted") {
+			query = { ...query, listed: false }
+		}
+
 		const products = await ProductModel.find(query)
+
+		if (sort == "price low to high") {
+			products.sort((a, b) => a.price - b.price)
+		}
+
+		if (sort == "price high to low") {
+			products.sort((a, b) => b.price - a.price)
+		}
 
 		res.status(200).send({
 			success: true,

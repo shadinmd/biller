@@ -9,18 +9,21 @@ import ProductInterface from "types/product.interface"
 import Link from "next/link"
 import { ScaleLoader } from "react-spinners"
 import { useStaff } from "@/context/staffContext"
+import Select from "@/components/shared/Select"
 
 const Products = () => {
 
 	const [products, setProducts] = useState<ProductInterface[]>([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
+	const [sort, setSort] = useState("sort")
+	const [filter, setFilter] = useState("filter")
 	const { staff } = useStaff()
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (staff.shop)
-				vendorApi.get(`/product/shop/${staff.shop._id}?name=${search}`)
+				vendorApi.get(`/product/shop/${staff.shop._id}?name=${search}&sort=${sort}&filter=${filter}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setProducts(data.products)
@@ -38,7 +41,7 @@ const Products = () => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [staff.shop, search])
+	}, [staff.shop, search, sort, filter])
 
 	const newProduct = (product: ProductInterface) => {
 		setProducts(products => [...products, product])
@@ -63,6 +66,16 @@ const Products = () => {
 						placeholder="Search.."
 						type="text"
 						className="rounded-lg py-2 px-3 drop-shadow-lg outline-none font-semibold"
+					/>
+					<Select
+						selected={sort}
+						onSelect={setSort}
+						items={["sort", "price high to low", "price low to high"]}
+					/>
+					<Select
+						selected={filter}
+						onSelect={setFilter}
+						items={["filter", "listed", "unlisted"]}
 					/>
 				</div>
 				<NewProduct className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop._id || ""} newProduct={newProduct} api={vendorApi}>
