@@ -23,7 +23,7 @@ const Customers = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (staff.shop)
-				vendorApi.get(`/customer/shop/${staff.shop}?name=${search}`)
+				vendorApi.get(`/customer/shop/${staff.shop._id}?name=${search}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setCustomers(data.customers)
