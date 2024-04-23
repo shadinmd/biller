@@ -23,10 +23,6 @@ const Page = () => {
 				<p className="text-primary font-bold text-xl">Discover the key features</p>
 				<div className="flex gap-10 justify-between text-primary font-bold">
 					<div className="flex flex-col items-start p-16 rounded-lg shadow-2xl bg-white">
-						<p>Mobile</p>
-						<p>Responsive</p>
-					</div>
-					<div className="flex flex-col items-start p-16 rounded-lg shadow-2xl bg-white">
 						<p>24/7</p>
 						<p>Support</p>
 					</div>
@@ -42,8 +38,8 @@ const Page = () => {
 			</div>
 			<div className="flex gap-5 items-center justify-center p-20">
 				<div className="w-full h-full">
-					<p className="text-4xl font-extrabold text-primary">Manage everything on the go</p>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, expedita? Aspernatur, explicabo aliquam voluptates nemo harum facilis quisquam, repudiandae fuga earum rem dolorum cum, quia odio fugiat commodi placeat aperiam!</p>
+					<p className="text-4xl font-extrabold text-primary">Get Easy Analytics and Breakdown of Your Sales</p>
+					<p>Gain valuable insights with our user-friendly analytics tools. Track key sales metrics, revenue, bestsellers, and customer purchasing patterns through comprehensive data visualizations and detailed breakdowns.</p>
 					<button className="bg-primary px-6 py-2 text-white rounded-full">Get started</button>
 				</div>
 				<div className="w-full h-full hidden sm:block">
@@ -56,7 +52,7 @@ const Page = () => {
 				</div>
 				<div className="flex flex-col gap-4 items-start justify-center w-full h-full">
 					<p className="text-4xl font-extrabold text-primary">Manage everything on the go</p>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, expedita? Aspernatur, explicabo aliquam voluptates nemo harum facilis quisquam, repudiandae fuga earum rem dolorum cum, quia odio fugiat commodi placeat aperiam!</p>
+					<p>Stay in control of your business operations from anywhere with our mobile app. Process transactions, update inventory, monitor sales activity, and ensure smooth operations, even when you're away from the store.</p>
 					<button className="bg-primary px-6 py-2 text-white rounded-full">Get started</button>
 				</div>
 			</div>
