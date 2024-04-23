@@ -14,7 +14,7 @@ const cronTask = async () => {
 }
 
 const startCron = () => {
-	cron.schedule("*/5 * * * * *", cronTask)
+	cron.schedule("*/5 * * * *", cronTask)
 }
 
 export default startCron
