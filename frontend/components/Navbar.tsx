@@ -25,10 +25,6 @@ const Navbar = () => {
 					<Link href={"/plans"}>Plans</Link>
 					{pathname == "/plans" && <span className="bg-primary rounded-full w-[40px] h-[4px]"></span>}
 				</div>
-				<div className="flex flex-col items-center justify-center">
-					<Link href={"/about"}>About</Link>
-					{pathname == "/about" && <span className="bg-primary rounded-full w-[40px] h-[4px]"></span>}
-				</div>
 			</div>
 			<div className="flex items-center gap-5">
 				<Link href={"/staff/login"} className="text-primary outline-none font-bold">
