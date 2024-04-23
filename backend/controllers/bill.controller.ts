@@ -123,7 +123,9 @@ export const createBill = async (req: Request, res: Response) => {
 export const getBillsByShop = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params
-		const { sort } = req.query
+		const { sort, currentPage, limit } = req.query
+
+		let skip = (Number(currentPage) - 1) * Number(limit)
 
 		if (!id) {
 			res.status(400).send({
@@ -133,7 +135,8 @@ export const getBillsByShop = async (req: Request, res: Response) => {
 			return
 		}
 
-		const bills = await BillModel.find({ shop: id })
+		const billCount = await BillModel.countDocuments({ shop: id })
+		const bills = await BillModel.find({ shop: id }).skip(skip).limit(Number(limit))
 
 		if (sort == "new fisrt") {
 			bills.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -154,7 +157,8 @@ export const getBillsByShop = async (req: Request, res: Response) => {
 		res.status(200).send({
 			success: true,
 			message: "bills fetched successfully",
-			bills
+			bills,
+			billCount
 		})
 
 	} catch (error) {
