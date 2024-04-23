@@ -67,7 +67,7 @@ const Customers = () => {
 						className="rounded-lg px-3 py-2 drop-shadow-lg outline-none font-semibold"
 					/>
 				</div>
-				<NewCustomer setCustomers={newCustomer} shopId={staff._id || ""} api={vendorApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
+				<NewCustomer setCustomers={newCustomer} shopId={staff._id || ""} api={staffApi} className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg size-8" >
 					<Icon icon={"mdi:plus"} className="text-green-500 text-2xl" />
 				</NewCustomer>
 			</div>
