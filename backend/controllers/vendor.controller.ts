@@ -10,7 +10,7 @@ export const getCurrentVendorDetails = async (req: Request, res: Response) => {
 		const token = req.headers.authorization
 		const payload = decodeToken(token!) as { id: string }
 
-		const vendor = await VendorModel.findById(payload.id)
+		const vendor = await VendorModel.findById(payload.id).populate("activePlan")
 
 		res.status(200).send({
 			success: true,
@@ -19,6 +19,7 @@ export const getCurrentVendorDetails = async (req: Request, res: Response) => {
 		})
 
 	} catch (error) {
+		console.log(error)
 		handle500ServerError(res)
 	}
 }

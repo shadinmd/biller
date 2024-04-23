@@ -4,11 +4,11 @@ import { vendorApi } from "@/lib/vendorApi";
 import { usePathname } from "next/navigation";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import VendorInterface from "types/vendor.interface";
+import VendorInterface, { FullVendorInterface } from "types/vendor.interface";
 
 interface Props {
 	fetchVendorDetails: () => void,
-	vendor: VendorInterface
+	vendor: FullVendorInterface
 }
 
 const vendorContext = createContext<Props>({
@@ -21,7 +21,17 @@ const vendorContext = createContext<Props>({
 		verified: true,
 		verificationToken: "",
 		verificationExpiry: new Date(),
-		activePlan: "",
+		activePlan: {
+			_id: "",
+			name: "",
+			description: "",
+			price: 0,
+			discount: 0,
+			active: false,
+			features: [],
+			productLimit: 0,
+			billLimit: 0,
+		},
 		planExpiry: new Date(),
 		subscribed: true,
 		active: false,
@@ -35,7 +45,7 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 
 	const pathname = usePathname()
 	const [expiredModal, setExpiredModal] = useState(false)
-	const [vendor, setVendor] = useState<VendorInterface>({
+	const [vendor, setVendor] = useState<FullVendorInterface>({
 		_id: "",
 		username: "",
 		password: "",
@@ -44,7 +54,17 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 		verified: true,
 		verificationToken: "",
 		verificationExpiry: new Date(),
-		activePlan: "",
+		activePlan: {
+			_id: "",
+			name: "",
+			description: "",
+			price: 0,
+			discount: 0,
+			active: false,
+			features: [],
+			productLimit: 0,
+			billLimit: 0,
+		},
 		planExpiry: new Date(),
 		active: false,
 		subscribed: true,
@@ -61,6 +81,7 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 			vendorApi.get("/vendor")
 				.then(({ data }) => {
 					if (data.success) {
+						console.log(data.vendor)
 						setVendor(data.vendor)
 					} else {
 						toast.error(data.message)

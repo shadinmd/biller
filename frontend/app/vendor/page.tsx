@@ -18,6 +18,7 @@ import {
 } from 'chart.js'
 import { useRouter } from 'next/navigation'
 import moment from 'moment'
+import { useVendor } from '@/context/vendorContext'
 
 ChartJS.register(
 	CategoryScale,
@@ -30,6 +31,7 @@ ChartJS.register(
 
 const Shop = () => {
 
+	const { vendor } = useVendor()
 	const [shop, setShop] = useState<ShopInterface>()
 	const [productCount, setProductCount] = useState(0)
 	const [staffCount, setStaffCount] = useState(0)
@@ -143,6 +145,14 @@ const Shop = () => {
 						<div className='flex gap-1'>
 							<p>started on: </p>
 							<p>{moment(shop?.createdAt).format("DD/MM/YYYY")}</p>
+						</div>
+						<div className='flex gap-1'>
+							<p>plan type: </p>
+							<p>{vendor.activePlan.name}</p>
+						</div>
+						<div className='flex gap-1'>
+							<p>plan expiry: </p>
+							<p>{moment(vendor.planExpiry).format("DD/MM/YYYY")}</p>
 						</div>
 					</div>
 
