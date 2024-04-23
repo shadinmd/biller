@@ -76,9 +76,10 @@ const Customers = () => {
 					<Link
 						href={`/staff/customers/${e?._id}`}
 						key={i}
-						className="flex flex-col w-full bg-white drop-shadow-lg rounded-lg p-2 font-semibold"
+						className="flex w-full bg-white drop-shadow-lg rounded-lg p-2 font-semibold"
 					>
 						<p className="w-full">{e?.name}</p>
+						<p className="w-full">ph: {e?.phone}</p>
 					</Link>
 				))}
 			</div>
