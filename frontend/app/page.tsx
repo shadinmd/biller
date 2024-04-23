@@ -52,7 +52,7 @@ const Page = () => {
 				</div>
 				<div className="flex flex-col gap-4 items-start justify-center w-full h-full">
 					<p className="text-4xl font-extrabold text-primary">Manage everything on the go</p>
-					<p>Stay in control of your business operations from anywhere with our mobile app. Process transactions, update inventory, monitor sales activity, and ensure smooth operations, even when you're away from the store.</p>
+					<p>Stay in control of your business operations from anywhere with our mobile app. Process transactions, update inventory, monitor sales activity, and ensure smooth operations, even when you&apos;re away from the store.</p>
 					<button className="bg-primary px-6 py-2 text-white rounded-full">Get started</button>
 				</div>
 			</div>
