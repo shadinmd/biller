@@ -8,16 +8,18 @@ import BillInterface from "types/bill.interface"
 import moment from "moment"
 import { useVendor } from "@/context/vendorContext"
 import Link from "next/link"
+import Select from "@/components/shared/Select"
 
 const Bills = () => {
 
 	const [bills, setBills] = useState<BillInterface[]>([])
 	const [loading, setLoading] = useState(true)
+	const [sort, setSort] = useState("sort")
 	const { vendor } = useVendor()
 
 	useEffect(() => {
 		if (vendor.shop)
-			vendorApi.get(`/bill/shop/${vendor.shop}`)
+			vendorApi.get(`/bill/shop/${vendor.shop}?sort=${sort}`)
 				.then(({ data }) => {
 					if (data.success) {
 						setBills(data.bills)
@@ -30,7 +32,7 @@ const Bills = () => {
 				}).finally(() => {
 					setLoading(false)
 				})
-	}, [vendor.shop])
+	}, [vendor.shop, sort])
 
 	if (loading) {
 		return (
@@ -42,8 +44,15 @@ const Bills = () => {
 
 	return (
 		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
-			<div className='flex justify-between'>
+			<div className='flex gap-1 w-full'>
 				<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg p-2'>Bills</p>
+				<div className="flex items-center gap-1">
+					<Select
+						selected={sort}
+						onSelect={setSort}
+						items={["sort", "price high to low", "price low to high", "new fisrt", "old first"]}
+					/>
+				</div>
 			</div>
 			<div className="flex flex-col gap-1 w-full">
 				{bills.map((e, i) => (
@@ -52,7 +61,7 @@ const Bills = () => {
 						key={`staff-${i}`}
 						className="flex items-center w-full p-2 font-semibold bg-white rounded-lg drop-shadow-lg"
 					>
-						<p className="w-full">{moment(e.createdAt).format("DD/MM/YY")}</p>
+						<p className="w-full">{moment(e.createdAt).format("HH:mm DD/MM/YY")}</p>
 						<p className="w-full">{e.totalAtfterDiscount}₹</p>
 					</Link>
 				))}

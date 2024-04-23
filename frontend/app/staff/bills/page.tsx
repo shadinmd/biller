@@ -8,16 +8,18 @@ import BillInterface from "types/bill.interface"
 import moment from "moment"
 import Link from "next/link"
 import { useStaff } from "@/context/staffContext"
+import Select from "@/components/shared/Select"
 
 const Bills = () => {
 
 	const [bills, setBills] = useState<BillInterface[]>([])
 	const [loading, setLoading] = useState(true)
+	const [sort, setSort] = useState("sort")
 	const { staff } = useStaff()
 
 	useEffect(() => {
 		if (staff.shop._id)
-			vendorApi.get(`/bill/shop/${staff.shop._id}`)
+			vendorApi.get(`/bill/shop/${staff.shop._id}?sort=${sort}`)
 				.then(({ data }) => {
 					if (data.success) {
 						setBills(data.bills)
@@ -30,7 +32,7 @@ const Bills = () => {
 				}).finally(() => {
 					setLoading(false)
 				})
-	}, [staff.shop])
+	}, [staff.shop, sort])
 
 	if (loading) {
 		return (
@@ -42,8 +44,15 @@ const Bills = () => {
 
 	return (
 		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
-			<div className='flex justify-between'>
+			<div className='flex gap-1 w-full'>
 				<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg p-2'>Bills</p>
+				<div className="flex items-center gap-1">
+					<Select
+						selected={sort}
+						onSelect={setSort}
+						items={["sort", "price high to low", "price low to high", "new fisrt", "old first"]}
+					/>
+				</div>
 			</div>
 			<div className="flex flex-col gap-1 w-full">
 				{bills.map((e, i) => (

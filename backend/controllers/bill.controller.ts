@@ -122,8 +122,8 @@ export const createBill = async (req: Request, res: Response) => {
 
 export const getBillsByShop = async (req: Request, res: Response) => {
 	try {
-
 		const { id } = req.params
+		const { sort } = req.query
 
 		if (!id) {
 			res.status(400).send({
@@ -134,6 +134,22 @@ export const getBillsByShop = async (req: Request, res: Response) => {
 		}
 
 		const bills = await BillModel.find({ shop: id })
+
+		if (sort == "new fisrt") {
+			bills.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+		}
+
+		if (sort == "old first") {
+			bills.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+		}
+
+		if (sort == "price high to low") {
+			bills.sort((a, b) => b.totalAtfterDiscount - a.totalAtfterDiscount)
+		}
+
+		if (sort == "price low to high") {
+			bills.sort((a, b) => a.totalAtfterDiscount - b.totalAtfterDiscount)
+		}
 
 		res.status(200).send({
 			success: true,
