@@ -1,7 +1,6 @@
 "use client"
 import { toast } from "sonner"
 import { handleAxiosError } from "@/lib/api"
-import { vendorApi } from "@/lib/vendorApi"
 import { useEffect, useState } from "react"
 import { ScaleLoader } from "react-spinners"
 import BillInterface from "types/bill.interface"
@@ -9,6 +8,7 @@ import moment from "moment"
 import Link from "next/link"
 import { useStaff } from "@/context/staffContext"
 import Select from "@/components/shared/Select"
+import { staffApi } from "@/lib/staffApi"
 
 const Bills = () => {
 
@@ -19,7 +19,7 @@ const Bills = () => {
 
 	useEffect(() => {
 		if (staff.shop._id)
-			vendorApi.get(`/bill/shop/${staff.shop._id}?sort=${sort}`)
+			staffApi.get(`/bill/shop/${staff.shop._id}?sort=${sort}`)
 				.then(({ data }) => {
 					if (data.success) {
 						setBills(data.bills)
