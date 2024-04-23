@@ -10,18 +10,20 @@ import Link from "next/link"
 import { ScaleLoader } from "react-spinners"
 import cn from "@/lib/cn"
 import { useStaff } from "@/context/staffContext"
+import Select from "@/components/shared/Select"
 
 const Staffs = () => {
 
 	const [staffs, setStaffs] = useState<StaffInterface[]>([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState("")
+	const [filter, setFilter] = useState("filter")
 	const { staff } = useStaff()
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (staff.shop)
-				vendorApi.get(`/staff/shop/${staff.shop._id}?name=${search}`)
+				vendorApi.get(`/staff/shop/${staff.shop._id}?name=${search}&filter=${filter}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setStaffs(data.staffs)
@@ -39,7 +41,7 @@ const Staffs = () => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [staff.shop, search])
+	}, [staff.shop, search, filter])
 
 	const newStaff = (staff: StaffInterface) => {
 		setStaffs(val => [...val, staff])
@@ -65,6 +67,7 @@ const Staffs = () => {
 						type="text"
 						className="drop-shadow-lg outline-none rounded-lg py-2 px-3"
 					/>
+					<Select selected={filter} items={["filter", "manager", "staff"]} onSelect={setFilter} />
 				</div>
 				<NewStaff className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop._id || ""} newStaff={newStaff} api={vendorApi} >
 					<Icon icon="mdi:plus" className="text-green-500 text-3xl" />

@@ -75,14 +75,21 @@ export const getStaffDetails = async (req: Request, res: Response) => {
 export const getAllStaffsByshop = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params
-		const { name } = req.query
+		const { name, filter } = req.query
 
-		const query = {
+		let query: any = {
 			username: {
 				$regex: name || "",
 				$options: "i"
 			},
 			shop: id
+		}
+
+		if (filter == "manager") {
+			query = { ...query, manager: true }
+		}
+		if (filter == "staff") {
+			query = { ...query, manager: false }
 		}
 
 		const staffs = await StaffModel.find(query, { password: false })
