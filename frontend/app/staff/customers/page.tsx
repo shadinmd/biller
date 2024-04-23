@@ -46,10 +46,6 @@ const Customers = () => {
 		setCustomers(val => [...val, customer])
 	}
 
-	const goBack = () => {
-		router.back()
-	}
-
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center bg-white rounded-lg drop-shadow-lg w-full h-full">
