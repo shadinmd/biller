@@ -13,7 +13,6 @@ import { Icon } from "@iconify/react/dist/iconify.js"
 import { staffApi } from "@/lib/staffApi"
 import { ScaleLoader } from "react-spinners"
 import { useStaff } from "@/context/staffContext"
-import { Bar } from "react-chartjs-2"
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js"
 import ProductGraph from "@/components/shared/ProductGraph"
 
@@ -177,8 +176,8 @@ const ProductView = ({ params }: Props) => {
 
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
 						<div>
-							<p className="text-custom-light-gray">rate</p>
-							<p className="font-bold">0</p>
+							<p className="text-custom-light-gray">value</p>
+							<p className="font-bold">{product.stock * product.price}</p>
 						</div>
 						<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 							<Icon icon={"material-symbols:contract"} className="text-white text-2xl" />

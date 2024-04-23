@@ -177,8 +177,8 @@ const ProductView = ({ params }: Props) => {
 
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
 						<div>
-							<p className="text-custom-light-gray">rate</p>
-							<p className="font-bold">0</p>
+							<p className="text-custom-light-gray">value</p>
+							<p className="font-bold">{product.stock * product.price}</p>
 						</div>
 						<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 							<Icon icon={"material-symbols:contract"} className="text-white text-2xl" />
