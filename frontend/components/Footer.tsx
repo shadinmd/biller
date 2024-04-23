@@ -8,7 +8,7 @@ const Footer = () => {
 			<div className="flex flex-col px-20 py-10 w-full text-custom-gray">
 				<p className="-tracking-widest font-extrabold text-2xl text-white ">Biller</p>
 				<p>
-					Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+					biller is a safe and easy to use application for <br /> managing bills and products for your buisness
 				</p>
 				<div className="flex gap-3 p-2">
 					<Link href="https://www.linkedin.com/in/shadin-muhammed-69b004256/">
