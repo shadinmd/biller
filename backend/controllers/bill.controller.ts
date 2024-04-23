@@ -97,6 +97,7 @@ export const createBill = async (req: Request, res: Response) => {
 				}
 				searchCustomer.point -= discount
 				await searchCustomer.save()
+				billDetails.customer = customer
 			} else {
 				console.log(points)
 				searchCustomer.point += points

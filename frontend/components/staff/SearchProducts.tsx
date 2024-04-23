@@ -40,7 +40,7 @@ const SearchProducts = ({ addProduct }: Props) => {
 					return
 				}
 				try {
-					const { data } = await staffApi.get(`/product/shop/listed/${staff.shop}?barcode=${barcode}`)
+					const { data } = await staffApi.get(`/product/shop/listed/${staff.shop._id}?barcode=${barcode}`)
 					if (data.success) {
 						if (data.product)
 							addProduct(data.product)

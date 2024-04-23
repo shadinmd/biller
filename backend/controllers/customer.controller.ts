@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { handle500ServerError } from "../lib/error.handlers";
 import CustomerModel from "../models/customer.model";
+import BillModel from "../models/bill.model";
 
 export const getCustomersByShop = async (req: Request, res: Response) => {
 	try {
@@ -96,6 +97,34 @@ export const getCustomerCountByShop = async (req: Request, res: Response) => {
 			success: true,
 			message: "customer count fetched successfully",
 			customerCount
+		})
+
+	} catch (error) {
+		console.log(error)
+		handle500ServerError(res)
+	}
+}
+
+export const getCustomerDetails = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+
+		const customer = await CustomerModel.findById(id)
+		const bills = await BillModel.find({ customer: id })
+
+		if (!customer) {
+			res.status(404).send({
+				success: false,
+				message: "customer not found"
+			})
+			return
+		}
+
+		res.status(200).send({
+			success: true,
+			message: "customer details fetched successfully",
+			customer,
+			bills
 		})
 
 	} catch (error) {

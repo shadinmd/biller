@@ -21,7 +21,7 @@ const Staffs = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (staff.shop)
-				vendorApi.get(`/staff/shop/${staff.shop}?name=${search}`)
+				vendorApi.get(`/staff/shop/${staff.shop._id}?name=${search}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setStaffs(data.staffs)

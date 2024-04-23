@@ -38,6 +38,10 @@ const billSchema = new mongoose.Schema<BillInterface>({
 	totalAtfterDiscount: {
 		type: Number,
 		required: true
+	},
+	customer: {
+		type: String,
+		required: false
 	}
 }, { timestamps: true })
 

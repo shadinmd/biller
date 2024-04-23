@@ -20,7 +20,7 @@ const Products = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (staff.shop)
-				vendorApi.get(`/product/shop/${staff.shop}?name=${search}`)
+				vendorApi.get(`/product/shop/${staff.shop._id}?name=${search}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setProducts(data.products)

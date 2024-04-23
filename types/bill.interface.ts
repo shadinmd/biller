@@ -6,7 +6,8 @@ interface BillInterface {
 	total: number
 	discount: number
 	totalAtfterDiscount: number
-	createdAt: Date
+	createdAt: Date,
+	customer: string
 }
 
 export default BillInterface

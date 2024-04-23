@@ -1,6 +1,6 @@
-
 "use client"
 import { handleAxiosError } from "@/lib/api"
+import { staffApi } from "@/lib/staffApi"
 import Link from "next/link"
 import moment from "moment"
 import { FC, useEffect, useState } from "react"
@@ -8,12 +8,9 @@ import { toast } from "sonner"
 import BillInterface from "types/bill.interface"
 import CustomerInterface from "types/customer.interface"
 import { Separator } from "@/components/shadcn/Seperator"
-import { vendorApi } from "@/lib/vendorApi"
 
 interface Props {
-	params: {
-		customerId: string
-	}
+	params: { id: string }
 }
 
 const CusomerView: FC<Props> = ({ params }) => {
@@ -22,7 +19,7 @@ const CusomerView: FC<Props> = ({ params }) => {
 	const [bills, setBills] = useState<BillInterface[]>([])
 
 	useEffect(() => {
-		vendorApi.get(`/customer/${params.customerId}`)
+		staffApi.get(`/customer/${params.id}`)
 			.then(({ data }) => {
 				if (data.success) {
 					setBills(data.bills)
@@ -32,7 +29,7 @@ const CusomerView: FC<Props> = ({ params }) => {
 				}
 			})
 			.catch(err => handleAxiosError(err))
-	}, [params.customerId])
+	}, [params.id])
 
 	return (
 		<div className="flex flex-col gap-5 items-start h-full w-fulla bg-white drop-shadow-lg rounded-lg p-5">
@@ -63,7 +60,7 @@ const CusomerView: FC<Props> = ({ params }) => {
 				{bills.map((e, i) => (
 					<Link
 						key={i}
-						href={`/vendor/bills/${e._id}`}
+						href={`/staff/bills/${e._id}`}
 						className="flex flex-col items-center w-full"
 					>
 						<div className="flex pb-2 items-center w-full">
@@ -86,4 +83,3 @@ const CusomerView: FC<Props> = ({ params }) => {
 }
 
 export default CusomerView
-

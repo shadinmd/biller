@@ -16,8 +16,8 @@ const Bills = () => {
 	const { staff } = useStaff()
 
 	useEffect(() => {
-		if (staff.shop)
-			vendorApi.get(`/bill/shop/${staff.shop}`)
+		if (staff.shop._id)
+			vendorApi.get(`/bill/shop/${staff.shop._id}`)
 				.then(({ data }) => {
 					if (data.success) {
 						setBills(data.bills)
