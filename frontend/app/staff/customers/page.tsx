@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
 import { handleAxiosError } from "@/lib/api"
-import { vendorApi } from "@/lib/vendorApi"
 import { toast } from "sonner"
 import Link from "next/link"
 import { ScaleLoader } from "react-spinners"
@@ -10,6 +9,7 @@ import { useRouter } from "next/navigation"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import NewCustomer from "@/components/staff/NewCustomer"
 import { useStaff } from "@/context/staffContext"
+import { staffApi } from "@/lib/staffApi"
 
 const Customers = () => {
 
@@ -23,7 +23,7 @@ const Customers = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if (staff.shop)
-				vendorApi.get(`/customer/shop/${staff.shop._id}?name=${search}`)
+				staffApi.get(`/customer/shop/${staff.shop._id}?name=${search}`)
 					.then(({ data }) => {
 						if (data.success) {
 							setCustomers(data.customers)
