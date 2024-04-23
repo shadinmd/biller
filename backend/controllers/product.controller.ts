@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express"
+import { Request, Response } from "express"
 import { handle500ServerError } from "../lib/error.handlers"
 import ProductModel from "../models/product.model"
 import BillModel from "../models/bill.model"
