@@ -73,7 +73,17 @@ export const VendorProvider = ({ children }: { children: ReactNode }) => {
 	})
 
 	const fetchVendorDetails = () => {
-
+		if (localStorage.getItem("vendor-token")) {
+			vendorApi.get("/vendor")
+				.then(({ data }) => {
+					if (data.success) {
+						console.log(data.vendor)
+						setVendor(data.vendor)
+					} else {
+						toast.error(data.message)
+					}
+				})
+		}
 	}
 
 	useEffect(() => {
