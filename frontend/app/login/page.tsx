@@ -1,6 +1,7 @@
 "use client"
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
+import { useVendor } from '@/context/vendorContext'
 import api, { handleAxiosError } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -21,12 +22,14 @@ const Login = () => {
 
 	const { register, handleSubmit, formState: { errors } } = useForm<formType>({ resolver: zodResolver(formSchemma) })
 	const router = useRouter()
+	const { fetchVendorDetails } = useVendor()
 
 	const onSubmit = async (data: formType) => {
 		try {
 			const response = await api.post("/auth/vendor/login", data)
 			if (response.data.success) {
 				localStorage.setItem("vendor-token", response.data.token)
+				fetchVendorDetails()
 				router.push("/vendor")
 			} else {
 				toast.error(response.data.message)

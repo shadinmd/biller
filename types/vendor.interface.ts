@@ -26,7 +26,7 @@ export interface FullVendorInterface {
 	verified: boolean
 	verificationToken: string
 	verificationExpiry: Date
-	activePlan: PlanInterface
+	activePlan: PlanInterface | undefined
 	planExpiry: Date
 	active: boolean
 	subscribed: boolean

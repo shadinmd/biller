@@ -148,7 +148,7 @@ const Shop = () => {
 						</div>
 						<div className='flex gap-1'>
 							<p>plan type: </p>
-							<p>{vendor.activePlan.name}</p>
+							<p>{vendor.activePlan?.name}</p>
 						</div>
 						<div className='flex gap-1'>
 							<p>plan expiry: </p>

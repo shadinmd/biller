@@ -33,7 +33,6 @@ const vendorSchema = new mongoose.Schema<vendorInterface>({
 	},
 	activePlan: {
 		type: String,
-		default: "",
 		ref: "Plan"
 	},
 	planExpiry: {
