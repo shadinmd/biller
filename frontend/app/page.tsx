@@ -37,7 +37,7 @@ const Page = () => {
 				</div>
 			</div>
 			<div className="flex gap-5 items-center justify-center p-20">
-				<div className="w-full h-full">
+				<div className="flex flex-col gap-4 items-start justify-center w-full h-full">
 					<p className="text-4xl font-extrabold text-primary">Get Easy Analytics and Breakdown of Your Sales</p>
 					<p>Gain valuable insights with our user-friendly analytics tools. Track key sales metrics, revenue, bestsellers, and customer purchasing patterns through comprehensive data visualizations and detailed breakdowns.</p>
 					<button className="bg-primary px-6 py-2 text-white rounded-full">Get started</button>
