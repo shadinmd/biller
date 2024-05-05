@@ -31,7 +31,10 @@ const Verify = () => {
 			api.post("/auth/vendor/verify", { token })
 				.then(({ data }) => {
 					if (data.success) {
-						router.push("/vendor")
+						if (localStorage.getItem("token"))
+							router.push("/vendor")
+						else
+							router.push("/login")
 					} else {
 						toast.error(data.message)
 						setLoading(false)
