@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(cors({
-	origin: "*"
+	origin: process.env.FRONT_URL
 }))
 
 app.use("/api/auth", authRouter)
