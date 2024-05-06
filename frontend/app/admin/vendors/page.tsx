@@ -34,7 +34,7 @@ const Vendors = () => {
 		<div className='flex flex-col gap-1 py-3 px-5 w-full h-full'>
 			<div className="flex items-center w-full justify-between">
 				<div className="flex gap-1 items-center h-full">
-					<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg px-2 h-full'>Staffs</p>
+					<p className='flex items-center justify-center text-xl font-bold bg-white drop-shadow-lg rounded-lg px-2 h-full'>Vendors</p>
 					<input
 						value={search}
 						onChange={e => setSearch(e.target.value)}
