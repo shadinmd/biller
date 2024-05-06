@@ -5,7 +5,8 @@ import { adminApi } from "@/lib/adminApi"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import VendorInterface from "types/vendor.interface"
+import VendorInterface, { FullVendorInterface } from "types/vendor.interface"
+import moment from "moment"
 
 interface Props {
 	params: { id: string }
@@ -13,7 +14,7 @@ interface Props {
 
 const Vendor = ({ params: { id } }: Props) => {
 
-	const [vendor, setVendor] = useState<VendorInterface>()
+	const [vendor, setVendor] = useState<FullVendorInterface>()
 	const [customerCount, setCustomerCount] = useState(0)
 	const [staffCount, setStaffCount] = useState(0)
 	const [billCount, setBillCount] = useState(0)
@@ -93,7 +94,7 @@ const Vendor = ({ params: { id } }: Props) => {
 				toast.success(data.message)
 				let temp = { ...vendor }
 				temp.blocked = vendor?.blocked ? false : true
-				setVendor(temp as VendorInterface)
+				setVendor(temp as FullVendorInterface)
 			} else {
 				toast.error(data.message)
 			}
@@ -107,11 +108,21 @@ const Vendor = ({ params: { id } }: Props) => {
 
 			<div className="flex gap-5 w-full h-40">
 
-				<div className="flex p-2 items-start w-full h-full bg-white rounded-lg drop-shadow-lg">
+				<div className="flex gap-5 p-2 items-start w-full h-full bg-white rounded-lg drop-shadow-lg">
 					<div>
 						<Icon icon={"mdi:person"} className="text-7xl" />
 					</div>
-					<p className="text-black font-bold">{vendor?.username}</p>
+					<div className="flex flex-col">
+						<p className="text-black font-bold">{vendor?.username}</p>
+						<div className="flex items-center gap-5">
+							<p className="text-black font-bold">Plan: </p>
+							<p className="text-black font-bold">{vendor?.activePlan?.name}</p>
+						</div>
+						<div className="flex items-center gap-5">
+							<p className="text-black font-bold">Plan Expiry: </p>
+							<p className="text-black font-bold">{moment(vendor?.planExpiry).format("DD-MM-YYYY")}</p>
+						</div>
+					</div>
 				</div>
 
 				<div className="grid gap-5 grid-cols-2 grid-rows-2 w-full h-full">

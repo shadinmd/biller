@@ -40,7 +40,7 @@ export const getVendorDetails = async (req: Request, res: Response) => {
 			return
 		}
 
-		const vendor = await VendorModel.findOne({ _id: id })
+		const vendor = await VendorModel.findOne({ _id: id }).populate("activePlan")
 
 		if (!vendor) {
 			res.status(400).send({
