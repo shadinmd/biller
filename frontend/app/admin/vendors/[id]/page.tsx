@@ -14,6 +14,10 @@ interface Props {
 const Vendor = ({ params: { id } }: Props) => {
 
 	const [vendor, setVendor] = useState<VendorInterface>()
+	const [customerCount, setCustomerCount] = useState(0)
+	const [staffCount, setStaffCount] = useState(0)
+	const [billCount, setBillCount] = useState(0)
+	const [productCount, setProductCount] = useState(0)
 
 	useEffect(() => {
 		adminApi.get(`/admin/vendor/${id}`)
@@ -28,6 +32,59 @@ const Vendor = ({ params: { id } }: Props) => {
 				handleAxiosError(error)
 			})
 	}, [id])
+
+	useEffect(() => {
+		if (vendor?.shop) {
+			adminApi.get(`/customer/shop/${vendor.shop}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setCustomerCount(data.customerCount)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
+			adminApi.get(`/product/shop/${vendor.shop}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setProductCount(data.products)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
+			adminApi.get(`/staff/shop/${vendor.shop}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setStaffCount(data.staffs)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
+			adminApi.get(`/bill/shop/${vendor.shop}/count`)
+				.then(({ data }) => {
+					if (data.success) {
+						setBillCount(data.bills)
+					} else {
+						toast.error(data.message)
+					}
+				})
+				.catch(error => {
+					handleAxiosError(error)
+				})
+
+		}
+	}, [vendor?.shop])
 
 	const blockVendor = async () => {
 		try {
@@ -61,8 +118,8 @@ const Vendor = ({ params: { id } }: Props) => {
 
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
 						<div>
-							<p className="text-custom-light-gray">plan type</p>
-							<p className="font-bold">Pro</p>
+							<p className="text-custom-light-gray">Bills</p>
+							<p className="font-bold">{billCount}</p>
 						</div>
 						<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 							<Icon icon={"material-symbols:contract"} className="text-white text-2xl" />
@@ -71,8 +128,8 @@ const Vendor = ({ params: { id } }: Props) => {
 
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
 						<div>
-							<p className="text-custom-light-gray">profit this month</p>
-							<p className="font-bold">$50,000</p>
+							<p className="text-custom-light-gray">Products</p>
+							<p className="font-bold">{productCount}</p>
 						</div>
 						<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 							<Icon icon={"game-icons:money-stack"} className="text-white text-2xl" />
@@ -82,7 +139,7 @@ const Vendor = ({ params: { id } }: Props) => {
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
 						<div>
 							<p className="text-custom-light-gray">Staffs</p>
-							<p className="font-bold">5</p>
+							<p className="font-bold">{staffCount}</p>
 						</div>
 						<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 							<Icon icon={"mdi:account-group"} className="text-white text-2xl" />
@@ -91,8 +148,8 @@ const Vendor = ({ params: { id } }: Props) => {
 
 					<div className="flex items-center justify-between p-4 bg-white rounded-lg drop-shadow-lg">
 						<div>
-							<p className="text-custom-light-gray">Shops</p>
-							<p className="font-bold">1</p>
+							<p className="text-custom-light-gray">customers</p>
+							<p className="font-bold">{customerCount}</p>
 						</div>
 						<div className="flex items-center justify-center bg-primary rounded-xl w-[40px] h-[40px]">
 							<Icon icon={"mdi:store"} className="text-white text-2xl" />
