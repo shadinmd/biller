@@ -13,7 +13,7 @@ customerRoute.post("/", createCustomer)
 
 
 customerRoute.get("/shop/:id", authorizationMiddleware("vendor", "staff", "manager"), getCustomersByShop)
-customerRoute.get("/shop/:id/count", authorizationMiddleware("vendor", "staff", "manager"), getCustomerCountByShop)
+customerRoute.get("/shop/:id/count", authorizationMiddleware("vendor", "staff", "manager", "admin"), getCustomerCountByShop)
 
 customerRoute.get("/:id", getCustomerDetails)
 

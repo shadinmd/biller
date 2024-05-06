@@ -25,7 +25,7 @@ billRouter.route("/shop/:id")
 	.get(authorizationMiddleware("staff", "vendor", "manager"), getBillsByShop)
 
 billRouter.route("/shop/:id/count")
-	.get(authorizationMiddleware("staff", "vendor", "manager"), getBillCountByShop)
+	.get(authorizationMiddleware("staff", "vendor", "manager", "admin"), getBillCountByShop)
 
 
 billRouter.get("/analytics", authorizationMiddleware("admin"), getBillAnalytics)

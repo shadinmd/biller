@@ -19,7 +19,7 @@ productRouter.route("/")
 	.post(authorizationMiddleware("staff", "vendor", "manager"), upload.single("file"), createProduct)
 
 productRouter.route("/shop/:id/count")
-	.get(authorizationMiddleware("staff", "vendor", "manager"), getProductCount)
+	.get(authorizationMiddleware("staff", "vendor", "manager", "admin"), getProductCount)
 productRouter.route("/shop/:id")
 	.get(authorizationMiddleware("staff", "vendor", "manager"), getAllProductsbyShop)
 

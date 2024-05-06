@@ -21,7 +21,7 @@ staffRouter.route("/shop/:id")
 	.get(authorizationMiddleware("vendor", "staff", "manager"), getAllStaffsByshop)
 
 staffRouter.route("/shop/:id/count")
-	.get(authorizationMiddleware("vendor", "staff", "manager"), getStaffCount)
+	.get(authorizationMiddleware("vendor", "staff", "manager", "admin"), getStaffCount)
 
 staffRouter.route("/manager/:id")
 	.put(authorizationMiddleware("vendor", "manager"), changeManagerStatus)
