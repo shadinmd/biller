@@ -98,9 +98,13 @@ const StaffView = ({ params }: Props) => {
 			<div className="flex flex-col lg:flex-row gap-5 items-center w-full">
 				<div className="flex gap-5 h-full w-full p-5 bg-white rounded-lg drop-shadow-lg">
 
-					<div className="flex gap-2 w-full">
-						<div className="h-full">
-							<p className="text-xl font-bold">{staff?.username}</p>
+					<div className="flex flex-col gap-1 w-full">
+						<div className="">
+							<p className="text-lg font-bold">{staff?.username}</p>
+						</div>
+						<div className="flex items-center gap-2">
+							<p className="text-lg font-bold">Started on: </p>
+							<p className="font-bold">{moment(staff.createdAt).format("DD-MM-YYYY")}</p>
 						</div>
 					</div>
 
