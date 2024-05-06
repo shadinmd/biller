@@ -15,9 +15,6 @@ jobs:
         with:
           node-version: 21
 
-      - run: echo "here" > here.txt
-        working-directory: ./backend
-
       - run: npm i
         working-directory: ./backend
 
@@ -25,7 +22,7 @@ jobs:
         working-directory: ./backend
 
       - name: Create .env
-        run: cat ${{ secrets.env }} > ./.env
+        run: echo ${{ secrets.env }} > ./.env
         working-directory: ./backend
 
       - name: Deploy
