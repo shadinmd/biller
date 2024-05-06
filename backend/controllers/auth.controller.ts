@@ -34,6 +34,7 @@ export const adminLogin = async (req: Request, res: Response) => {
 				success: false,
 				message: `incorrect username or password`
 			})
+			return
 		}
 
 		const token = createToken({
