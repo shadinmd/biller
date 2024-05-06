@@ -13,11 +13,11 @@ jobs:
       - run: npm i
         working-directory: ./backend
 
-      - run: npm run build
+      - name: Create .env
+        run: echo "${{secrets.env}}" > .env
         working-directory: ./backend
 
-      - name: Create .env
-        run: echo "${{secrets.env}}" > ./dist/backend/.env
+      - run: npm run build
         working-directory: ./backend
 
       - name: Deploy
