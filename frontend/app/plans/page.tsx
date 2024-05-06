@@ -4,12 +4,14 @@ import Navbar from "@/components/Navbar"
 import api, { handleAxiosError } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { ScaleLoader } from "react-spinners"
 import { toast } from "sonner"
 import PlanInterface from "types/plan.interface"
 
 const Plans = () => {
 
 	const [plans, setPlans] = useState<PlanInterface[]>([])
+	const [loading, setLoading] = useState(true)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -23,6 +25,8 @@ const Plans = () => {
 			})
 			.catch((error) => {
 				handleAxiosError(error)
+			}).finally(() => {
+				setLoading(false)
 			})
 	}, [])
 
@@ -37,7 +41,7 @@ const Plans = () => {
 		<div className="flex flex-col w-screen h-screen bg-custom-offwhite">
 			<Navbar />
 			<div className="flex justify-center gap-5 h-full p-10">
-				{plans.map((e, i) => (
+				{loading ? <ScaleLoader /> : plans.map((e, i) => (
 					<div key={i} className="flex flex-col gap-2 items-start bg-white rounded-lg drop-shadow-lg p-5">
 						<div className="flex items-center justify-between gap-5 w-full">
 							<div className="flex flex-col">
