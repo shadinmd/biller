@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 21
 
-      - run: cat "here" > here.txt
+      - run: echo "here" > here.txt
         working-directory: ./backend
 
       - run: npm i
