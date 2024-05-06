@@ -1,0 +1,26 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    env:
+      NODE_ENV: production
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 21
+      - run: npm ci
+      - run: npm run build --if-present
+      - name: create .env 
+        run: cat ${{secrets.env}} > ./dist/backend/.env
+      - name: deploy
+        run: |
+          pm2 stop biller || true
+          pm2 delete biller || true
+          pm2 start ./dist/backend/main.js --name biller
