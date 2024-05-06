@@ -78,9 +78,12 @@ const Products = () => {
 						items={["filter", "listed", "unlisted"]}
 					/>
 				</div>
-				<NewProduct className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop._id || ""} newProduct={newProduct} api={vendorApi}>
-					<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
-				</NewProduct>
+				{
+					staff.manager &&
+					<NewProduct className="bg-white rounded-lg drop-shadow-lg" shopId={staff.shop._id || ""} newProduct={newProduct} api={vendorApi}>
+						<Icon icon={"mdi:plus"} className='text-4xl text-green-500' />
+					</NewProduct>
+				}
 			</div>
 			<div className="flex flex-col gap-1">
 				{products.map((e, i) => (
