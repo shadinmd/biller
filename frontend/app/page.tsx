@@ -21,7 +21,7 @@ const Page = () => {
 			</div>
 			<div className="flex flex-col gap-10 items-center w-full py-10 bg-custom-offwhite">
 				<p className="text-primary font-bold text-xl">Discover the key features</p>
-				<div className="flex gap-10 justify-between text-primary font-bold">
+				<div className="flex flex-col md:flex-row gap-10 justify-between text-primary font-bold">
 					<div className="flex flex-col items-start p-16 rounded-lg shadow-2xl bg-white">
 						<p>24/7</p>
 						<p>Support</p>
