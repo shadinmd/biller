@@ -10,7 +10,7 @@ Biller is a comprehensive shop management and point-of-sale (POS) application bu
 
 - User Management
 
-    - Different staff roles with customizable privileges
+    - Different staff roles with privileges
     - Secure authentication and authorization
 
 
@@ -30,7 +30,7 @@ Biller is a comprehensive shop management and point-of-sale (POS) application bu
 - Sales and Billing
 
     - Intuitive POS interface
-    - QR code scanning for quick product entry
+    - Bar code scanning for quick product entry
     - Multiple payment methods including Stripe integration
 
 
@@ -46,7 +46,6 @@ Biller is a comprehensive shop management and point-of-sale (POS) application bu
 - Backend: Node.js, Express, MongoDB, TypeScript
 - Database: MongoDB
 - Authentication: JSON Web Tokens (JWT)
-- API: RESTful API
 - Payment Processing: Stripe
 - Email Service: Nodemailer
 - Image Storage: Cloudinary
